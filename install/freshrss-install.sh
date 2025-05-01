@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 community-scripts ORG
 # Author: bvdberg01
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://github.com/FreshRSS/FreshRSS
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -37,11 +37,11 @@ msg_ok "Set up PostgreSQL"
 
 msg_info "Installing FreshRSS"
 RELEASE=$(curl -fsSL https://api.github.com/repos/FreshRSS/FreshRSS/releases/latest | grep "tag_name" | awk '{print substr($2, 2, length($2)-3) }')
-cd /opt
+cd /opt || exit
 curl -fsSL "https://github.com/FreshRSS/FreshRSS/archive/refs/tags/${RELEASE}.zip" -o $(basename "https://github.com/FreshRSS/FreshRSS/archive/refs/tags/${RELEASE}.zip")
 unzip -q "${RELEASE}.zip"
 mv "/opt/FreshRSS-${RELEASE}" /opt/freshrss
-cd /opt/freshrss
+cd /opt/freshrss || exit
 chown -R www-data:www-data /opt/freshrss
 chmod -R g+rX /opt/freshrss
 chmod -R g+w /opt/freshrss/data/

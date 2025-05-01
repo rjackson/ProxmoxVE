@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-source <(curl -fsSL https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func)
+source <(curl -fsSL https://raw.githubusercontent.com/rjackson/ProxmoxVE/main/misc/build.func)
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster) | Co-Author: MickLesk (Canbiz) | Co-Author: CrazyWolf13
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://homarr.dev/
 
 APP="Homarr"
@@ -118,12 +118,12 @@ wait $PID
 EOF
     chmod +x /opt/run_homarr.sh
 curl -fsSL "https://github.com/homarr-labs/homarr/archive/refs/tags/v${RELEASE}.zip" -o $(basename "https://github.com/homarr-labs/homarr/archive/refs/tags/v${RELEASE}.zip")
-    unzip -q v${RELEASE}.zip
-    rm -rf v${RELEASE}.zip
+    unzip -q v"${RELEASE}".zip
+    rm -rf v"${RELEASE}".zip
     rm -rf /opt/homarr
-    mv homarr-${RELEASE} /opt/homarr
+    mv homarr-"${RELEASE}" /opt/homarr
     mv /opt/homarr-data-backup/.env /opt/homarr/.env
-    cd /opt/homarr
+    cd /opt/homarr || exit
     $STD pnpm install
     $STD pnpm build
     cp /opt/homarr/apps/nextjs/next.config.ts .

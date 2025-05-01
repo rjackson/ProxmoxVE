@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 community-scripts ORG
 # Author: MickLesk (CanbiZ)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://github.com/ZoeyVid/NPMplus
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -26,17 +26,17 @@ $STD rc-service docker start
 $STD rc-update add docker default
 
 get_latest_release() {
-    curl -fsSL https://api.github.com/repos/$1/releases/latest | grep '"tag_name":' | cut -d'"' -f4
+    curl -fsSL https://api.github.com/repos/"$1"/releases/latest | grep '"tag_name":' | cut -d'"' -f4
 }
 DOCKER_COMPOSE_LATEST_VERSION=$(get_latest_release "docker/compose")
 DOCKER_CONFIG=${DOCKER_CONFIG:-$HOME/.docker}
-mkdir -p $DOCKER_CONFIG/cli-plugins
-curl -fsSL https://github.com/docker/compose/releases/download/$DOCKER_COMPOSE_LATEST_VERSION/docker-compose-linux-x86_64 -o ~/.docker/cli-plugins/docker-compose
-chmod +x $DOCKER_CONFIG/cli-plugins/docker-compose
+mkdir -p "$DOCKER_CONFIG"/cli-plugins
+curl -fsSL https://github.com/docker/compose/releases/download/"$DOCKER_COMPOSE_LATEST_VERSION"/docker-compose-linux-x86_64 -o ~/.docker/cli-plugins/docker-compose
+chmod +x "$DOCKER_CONFIG"/cli-plugins/docker-compose
 msg_ok "Installed Docker & Compose"
 
 msg_info "Fetching NPMplus"
-cd /opt
+cd /opt || exit
 curl -fsSL "https://raw.githubusercontent.com/ZoeyVid/NPMplus/refs/heads/develop/compose.yaml" -o $(basename "https://raw.githubusercontent.com/ZoeyVid/NPMplus/refs/heads/develop/compose.yaml")
 msg_ok "Fetched NPMplus"
 

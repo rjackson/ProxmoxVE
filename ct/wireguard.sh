@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-source <(curl -fsSL https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func)
+source <(curl -fsSL https://raw.githubusercontent.com/rjackson/ProxmoxVE/main/misc/build.func)
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://www.wireguard.com/
 
 APP="Wireguard"
@@ -30,7 +30,7 @@ function update_script() {
     apt-get update
     apt-get -y upgrade
     sleep 2
-    cd /etc/wgdashboard/src
+    cd /etc/wgdashboard/src || exit
     ./wgd.sh update
     ./wgd.sh start
     exit

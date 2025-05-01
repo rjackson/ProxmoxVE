@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 community-scripts ORG
 # Author: bvdberg01
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://listmonk.app/
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -32,7 +32,7 @@ $STD sudo -u postgres psql -c "CREATE DATABASE $DB_NAME WITH OWNER $DB_USER TEMP
 msg_ok "Set up PostgreSQL"
 
 msg_info "Installing listmonk"
-cd /opt
+cd /opt || exit
 mkdir /opt/listmonk
 mkdir /opt/listmonk/uploads
 RELEASE=$(curl -fsSL https://api.github.com/repos/knadh/listmonk/releases/latest | grep "tag_name" | awk '{print substr($2, 3, length($2)-4) }')
@@ -43,7 +43,7 @@ $STD /opt/listmonk/listmonk --new-config --config /opt/listmonk/config.toml
 sed -i -e 's/address = "localhost:9000"/address = "0.0.0.0:9000"/' -e 's/^password = ".*"/password = "'"$DB_PASS"'"/' /opt/listmonk/config.toml
 $STD /opt/listmonk/listmonk --install --yes --config /opt/listmonk/config.toml
 
-echo "${RELEASE}" >/opt/${APPLICATION}_version.txt
+echo "${RELEASE}" >/opt/"${APPLICATION}"_version.txt
 msg_ok "Installed listmonk"
 
 msg_info "Creating Service"

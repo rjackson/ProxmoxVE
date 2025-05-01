@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 community-scripts ORG
 # Author: bvdberg01
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://netboxlabs.com/
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -50,11 +50,11 @@ $STD sudo -u postgres psql -c "CREATE DATABASE $DB_NAME WITH OWNER $DB_USER TEMP
 msg_ok "Set up PostgreSQL"
 
 msg_info "Installing NetBox (Patience)"
-cd /opt
+cd /opt || exit
 RELEASE=$(curl -fsSL https://api.github.com/repos/netbox-community/netbox/releases/latest | grep "tag_name" | awk '{print substr($2, 3, length($2)-4) }')
 curl -fsSL "https://github.com/netbox-community/netbox/archive/refs/tags/v${RELEASE}.zip" -o $(basename "https://github.com/netbox-community/netbox/archive/refs/tags/v${RELEASE}.zip")
 unzip -q "v${RELEASE}.zip"
-mv /opt/netbox-${RELEASE}/ /opt/netbox
+mv /opt/netbox-"${RELEASE}"/ /opt/netbox
 
 $STD adduser --system --group netbox
 chown --recursive netbox /opt/netbox/netbox/media/
@@ -85,7 +85,7 @@ mv /opt/netbox/contrib/*.service /etc/systemd/system/
 systemctl daemon-reload
 systemctl enable -q --now netbox netbox-rq
 
-echo "${RELEASE}" >/opt/${APPLICATION}_version.txt
+echo "${RELEASE}" >/opt/"${APPLICATION}"_version.txt
 echo -e "Netbox Secret: \e[32m$SECRET_KEY\e[0m" >>~/netbox.creds
 msg_ok "Installed NetBox"
 

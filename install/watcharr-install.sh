@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 community-scripts ORG
 # Author: Slaviša Arežina (tremor021)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://github.com/sbondCo/Watcharr
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -43,12 +43,12 @@ temp_file=$(mktemp)
 RELEASE=$(curl -fsSL https://api.github.com/repos/sbondCo/Watcharr/releases/latest | grep "tag_name" | awk '{print substr($2, 3, length($2)-4) }')
 curl -fsSL "https://github.com/sbondCo/Watcharr/archive/refs/tags/v${RELEASE}.tar.gz" -o "$temp_file"
 tar -xzf "$temp_file"
-mv Watcharr-${RELEASE}/ /opt/watcharr
-cd /opt/watcharr
+mv Watcharr-"${RELEASE}"/ /opt/watcharr
+cd /opt/watcharr || exit
 $STD npm i
 $STD npm run build
 mv ./build ./server/ui
-cd server
+cd server || exit
 export CGO_ENABLED=1 GOOS=linux
 go mod download
 go build -o ./watcharr
@@ -59,7 +59,7 @@ cd /opt/watcharr/server
 ./watcharr
 EOF
 chmod +x /opt/start.sh
-echo "${RELEASE}" >/opt/${APPLICATION}_version.txt
+echo "${RELEASE}" >/opt/"${APPLICATION}"_version.txt
 msg_ok "Setup Watcharr"
 
 msg_info "Creating Service"

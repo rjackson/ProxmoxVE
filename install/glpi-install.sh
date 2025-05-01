@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 community-scripts ORG
 # Author: Nícolas Pastorello (opastorello)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://www.glpi-project.org/
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -41,13 +41,13 @@ mysql -u root -e "GRANT SELECT ON \`mysql\`.\`time_zone_name\` TO '$DB_USER'@'lo
 msg_ok "Set up database"
 
 msg_info "Installing GLPi"
-cd /opt
+cd /opt || exit
 RELEASE=$(curl -fsSL https://api.github.com/repos/glpi-project/glpi/releases/latest | grep '"tag_name"' | sed -E 's/.*"tag_name": "([^"]+)".*/\1/')
 curl -fsSL "https://github.com/glpi-project/glpi/releases/download/${RELEASE}/glpi-${RELEASE}.tgz" -o $(basename "https://github.com/glpi-project/glpi/releases/download/${RELEASE}/glpi-${RELEASE}.tgz")
-$STD tar -xzvf glpi-${RELEASE}.tgz
-cd /opt/glpi
-$STD php bin/console db:install --db-name=$DB_NAME --db-user=$DB_USER --db-password=$DB_PASS --no-interaction
-echo "${RELEASE}" >/opt/${APPLICATION}_version.txt
+$STD tar -xzvf glpi-"${RELEASE}".tgz
+cd /opt/glpi || exit
+$STD php bin/console db:install --db-name=$DB_NAME --db-user=$DB_USER --db-password="$DB_PASS" --no-interaction
+echo "${RELEASE}" >/opt/"${APPLICATION}"_version.txt
 msg_ok "Installed GLPi"
 
 msg_info "Setting Downstream file"
@@ -129,12 +129,12 @@ msg_ok "Setup Cronjob"
 msg_info "Update PHP Params"
 PHP_VERSION=$(ls /etc/php/ | grep -E '^[0-9]+\.[0-9]+$' | head -n 1)
 PHP_INI="/etc/php/$PHP_VERSION/apache2/php.ini"
-sed -i 's/^upload_max_filesize = .*/upload_max_filesize = 20M/' $PHP_INI
-sed -i 's/^post_max_size = .*/post_max_size = 20M/' $PHP_INI
-sed -i 's/^max_execution_time = .*/max_execution_time = 60/' $PHP_INI
-sed -i 's/^max_input_vars = .*/max_input_vars = 5000/' $PHP_INI
-sed -i 's/^memory_limit = .*/memory_limit = 256M/' $PHP_INI
-sed -i 's/^;\?\s*session.cookie_httponly\s*=.*/session.cookie_httponly = On/' $PHP_INI
+sed -i 's/^upload_max_filesize = .*/upload_max_filesize = 20M/' "$PHP_INI"
+sed -i 's/^post_max_size = .*/post_max_size = 20M/' "$PHP_INI"
+sed -i 's/^max_execution_time = .*/max_execution_time = 60/' "$PHP_INI"
+sed -i 's/^max_input_vars = .*/max_input_vars = 5000/' "$PHP_INI"
+sed -i 's/^memory_limit = .*/memory_limit = 256M/' "$PHP_INI"
+sed -i 's/^;\?\s*session.cookie_httponly\s*=.*/session.cookie_httponly = On/' "$PHP_INI"
 systemctl restart apache2
 msg_ok "Update PHP Params"
 
@@ -143,7 +143,7 @@ customize
 
 msg_info "Cleaning up"
 rm -rf /opt/glpi/install
-rm -rf /opt/glpi-${RELEASE}.tgz
+rm -rf /opt/glpi-"${RELEASE}".tgz
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean
 msg_ok "Cleaned"

@@ -2,7 +2,7 @@
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://github.com/community-scripts/rjackson/raw/main/LICENSE
 
 function header_info {
   clear
@@ -25,8 +25,8 @@ function error_exit() {
   local REASON="\e[97m${1:-$DEFAULT}\e[39m"
   local FLAG="\e[91m[ERROR] \e[93m$EXIT@$LINE"
   msg "$FLAG $REASON" 1>&2
-  [ ! -z ${CTID-} ] && cleanup_ctid
-  exit $EXIT
+  [ ! -z "${CTID-}" ] && cleanup_ctid
+  exit "$EXIT"
 }
 function warn() {
   local REASON="\e[97m$1\e[39m"
@@ -43,11 +43,11 @@ function msg() {
   echo -e "$TEXT"
 }
 function cleanup_ctid() {
-  if pct status $CTID &>/dev/null; then
-    if [ "$(pct status $CTID | awk '{print $2}')" == "running" ]; then
-      pct stop $CTID
+  if pct status "$CTID" &>/dev/null; then
+    if [ "$(pct status "$CTID" | awk '{print $2}')" == "running" ]; then
+      pct stop "$CTID"
     fi
-    pct destroy $CTID
+    pct destroy "$CTID"
   fi
 }
 
@@ -133,9 +133,9 @@ function select_storage() {
   # Query all storage locations
   local -a MENU
   while read -r line; do
-    local TAG=$(echo $line | awk '{print $1}')
-    local TYPE=$(echo $line | awk '{printf "%-10s", $2}')
-    local FREE=$(echo $line | numfmt --field 4-6 --from-unit=K --to=iec --format %.2f | awk '{printf( "%9sB", $6)}')
+    local TAG=$(echo "$line" | awk '{print $1}')
+    local TYPE=$(echo "$line" | awk '{printf "%-10s", $2}')
+    local FREE=$(echo "$line" | numfmt --field 4-6 --from-unit=K --to=iec --format %.2f | awk '{printf( "%9sB", $6)}')
     local ITEM="  Type: $TYPE Free: $FREE "
     local OFFSET=2
     if [[ $((${#ITEM} + $OFFSET)) -gt ${MSG_MAX_LENGTH:-} ]]; then
@@ -149,7 +149,7 @@ function select_storage() {
     warn "'$CONTENT_LABEL' needs to be selected for at least one storage location."
     die "Unable to detect valid storage location."
   elif [ $((${#MENU[@]} / 3)) -eq 1 ]; then
-    printf ${MENU[0]}
+    printf "${MENU[0]}"
   else
     local STORAGE
     while [ -z "${STORAGE:+x}" ]; do
@@ -158,7 +158,7 @@ function select_storage() {
         16 $(($MSG_MAX_LENGTH + 23)) 6 \
         "${MENU[@]}" 3>&1 1>&2 2>&3) || die "Menu aborted."
     done
-    printf $STORAGE
+    printf "$STORAGE"
   fi
 }
 
@@ -180,9 +180,9 @@ mapfile -t TEMPLATES < <(pveam available -section turnkeylinux | awk -v turnkey=
 TEMPLATE="${TEMPLATES[-1]}"
 
 # Download LXC template
-if ! pveam list $TEMPLATE_STORAGE | grep -q $TEMPLATE; then
+if ! pveam list "$TEMPLATE_STORAGE" | grep -q "$TEMPLATE"; then
   msg "Downloading LXC template (Patience)..."
-  pveam download $TEMPLATE_STORAGE $TEMPLATE >/dev/null ||
+  pveam download "$TEMPLATE_STORAGE" "$TEMPLATE" >/dev/null ||
     die "A problem occured while downloading the LXC template."
 fi
 
@@ -192,11 +192,11 @@ PCT_OPTIONS=(${PCT_OPTIONS[@]:-${DEFAULT_PCT_OPTIONS[@]}})
 
 # Create LXC
 msg "Creating LXC container..."
-pct create $CTID ${TEMPLATE_STORAGE}:vztmpl/${TEMPLATE} ${PCT_OPTIONS[@]} >/dev/null ||
+pct create "$CTID" "${TEMPLATE_STORAGE}":vztmpl/"${TEMPLATE}" ${PCT_OPTIONS[@]} >/dev/null ||
   die "A problem occured while trying to create container."
 
 # Save password
-echo "TurnKey ${turnkey} password: ${PASS}" >>~/turnkey-${turnkey}.creds # file is located in the Proxmox root directory
+echo "TurnKey ${turnkey} password: ${PASS}" >>~/turnkey-"${turnkey}".creds # file is located in the Proxmox root directory
 
 # Start container
 msg "Starting LXC Container..."
@@ -209,7 +209,7 @@ max_attempts=5
 attempt=1
 IP=""
 while [[ $attempt -le $max_attempts ]]; do
-  IP=$(pct exec $CTID ip a show dev eth0 | grep -oP 'inet \K[^/]+')
+  IP=$(pct exec "$CTID" ip a show dev eth0 | grep -oP 'inet \K[^/]+')
   if [[ -n $IP ]]; then
     break
   else

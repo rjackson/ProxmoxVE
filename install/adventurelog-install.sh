@@ -3,7 +3,7 @@
 # Copyright (c) 2021-2025 tteck
 # Author: tteck
 # Co-Author: MickLesk (Canbiz)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://github.com/seanmorley15/AdventureLog
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -66,11 +66,11 @@ msg_info "Installing AdventureLog (Patience)"
 DJANGO_ADMIN_USER="djangoadmin"
 DJANGO_ADMIN_PASS="$(openssl rand -base64 18 | tr -dc 'a-zA-Z0-9' | cut -c1-13)"
 LOCAL_IP="$(hostname -I | awk '{print $1}')"
-cd /opt
+cd /opt || exit
 RELEASE=$(curl -fsSL https://api.github.com/repos/seanmorley15/AdventureLog/releases/latest | grep "tag_name" | awk '{print substr($2, 3, length($2)-4) }')
 curl -fsSL "https://github.com/seanmorley15/AdventureLog/archive/refs/tags/v${RELEASE}.zip" -o $(basename "https://github.com/seanmorley15/AdventureLog/archive/refs/tags/v${RELEASE}.zip")
-unzip -q v${RELEASE}.zip
-mv AdventureLog-${RELEASE} /opt/adventurelog
+unzip -q v"${RELEASE}".zip
+mv AdventureLog-"${RELEASE}" /opt/adventurelog
 cat <<EOF >/opt/adventurelog/backend/server/.env
 PGHOST='localhost'
 PGDATABASE='${DB_NAME}'
@@ -93,7 +93,7 @@ DISABLE_REGISTRATION=False
 # EMAIL_HOST_PASSWORD='password'
 # DEFAULT_FROM_EMAIL='user@example.com'
 EOF
-cd /opt/adventurelog/backend/server
+cd /opt/adventurelog/backend/server || exit
 mkdir -p /opt/adventurelog/backend/server/media
 $STD pip install --upgrade pip
 $STD pip install -r requirements.txt
@@ -105,7 +105,7 @@ PUBLIC_SERVER_URL=http://$LOCAL_IP:8000
 BODY_SIZE_LIMIT=Infinity
 ORIGIN='http://$LOCAL_IP:3000'
 EOF
-cd /opt/adventurelog/frontend
+cd /opt/adventurelog/frontend || exit
 $STD pnpm i
 $STD pnpm build
 echo "${RELEASE}" >"/opt/${APPLICATION}_version.txt"
@@ -165,7 +165,7 @@ motd_ssh
 customize
 
 msg_info "Cleaning up"
-rm -rf /opt/v${RELEASE}.zip
+rm -rf /opt/v"${RELEASE}".zip
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean
 msg_ok "Cleaned"

@@ -3,7 +3,7 @@
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
 # Co-Author: MickLesk (Canbiz)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://linkwarden.app/
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -90,12 +90,12 @@ if [[ "${prompt,,}" =~ ^(y|yes)$ ]]; then
 fi
 
 msg_info "Installing Linkwarden (Patience)"
-cd /opt
+cd /opt || exit
 RELEASE=$(curl -fsSL https://api.github.com/repos/linkwarden/linkwarden/releases/latest | grep "tag_name" | awk '{print substr($2, 2, length($2)-3) }')
 curl -fsSL "https://github.com/linkwarden/linkwarden/archive/refs/tags/${RELEASE}.zip" -o $(basename "https://github.com/linkwarden/linkwarden/archive/refs/tags/${RELEASE}.zip")
-unzip -q ${RELEASE}.zip
-mv linkwarden-${RELEASE:1} /opt/linkwarden
-cd /opt/linkwarden
+unzip -q "${RELEASE}".zip
+mv linkwarden-"${RELEASE:1}" /opt/linkwarden
+cd /opt/linkwarden || exit
 $STD yarn
 $STD npx playwright install-deps
 $STD yarn playwright install
@@ -108,7 +108,7 @@ DATABASE_URL=postgresql://${DB_USER}:${DB_PASS}@localhost:5432/${DB_NAME}
 " >$env_path
 $STD yarn build
 $STD yarn prisma migrate deploy
-echo "${RELEASE}" >/opt/${APPLICATION}_version.txt
+echo "${RELEASE}" >/opt/"${APPLICATION}"_version.txt
 msg_ok "Installed Linkwarden"
 
 msg_info "Creating Service"
@@ -133,7 +133,7 @@ motd_ssh
 customize
 
 msg_info "Cleaning up"
-rm -rf /opt/${RELEASE}.zip
+rm -rf /opt/"${RELEASE}".zip
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean
 msg_ok "Cleaned"

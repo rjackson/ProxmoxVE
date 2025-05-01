@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 community-scripts ORG
 # Author: Kristian Skov
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://learn.microsoft.com/en-us/aspnet/core/host-and-deploy/linux-nginx?view=aspnetcore-9.0&tabs=linux-ubuntu
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -35,7 +35,7 @@ msg_ok "Application Configured"
 msg_info "Setting up FTP Server"
 useradd ftpuser
 FTP_PASS=$(openssl rand -base64 18 | tr -dc 'a-zA-Z0-9' | head -c13)
-usermod --password $(echo ${FTP_PASS} | openssl passwd -1 -stdin) ftpuser
+usermod --password $(echo "${FTP_PASS}" | openssl passwd -1 -stdin) ftpuser
 mkdir -p /var/www/html
 usermod -d /var/www/html ftp
 usermod -d /var/www/html ftpuser

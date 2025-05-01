@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 community-scripts ORG
 # Author: Slaviša Arežina (tremor021)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://github.com/outline/outline
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -56,9 +56,9 @@ temp_file=$(mktemp)
 LOCAL_IP="$(hostname -I | awk '{print $1}')"
 RELEASE=$(curl -fsSL https://api.github.com/repos/outline/outline/releases/latest | grep "tag_name" | awk '{print substr($2, 3, length($2)-4) }')
 curl -fsSL "https://github.com/outline/outline/archive/refs/tags/v${RELEASE}.tar.gz" -o "$temp_file"
-tar zxf $temp_file
-mv outline-${RELEASE} /opt/outline
-cd /opt/outline
+tar zxf "$temp_file"
+mv outline-"${RELEASE}" /opt/outline
+cd /opt/outline || exit
 cp .env.sample .env
 export NODE_ENV=development
 sed -i 's/NODE_ENV=production/NODE_ENV=development/g' /opt/outline/.env
@@ -99,7 +99,7 @@ motd_ssh
 customize
 
 msg_info "Cleaning up"
-rm -rf $temp_file
+rm -rf "$temp_file"
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean
 msg_ok "Cleaned"

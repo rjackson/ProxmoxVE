@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://uptime.kuma.pet/
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -33,7 +33,7 @@ msg_ok "Installed Node.js"
 msg_info "Installing Uptime Kuma"
 $STD git clone https://github.com/louislam/uptime-kuma.git
 mv uptime-kuma /opt/uptime-kuma
-cd /opt/uptime-kuma
+cd /opt/uptime-kuma || exit
 $STD npm run setup
 msg_ok "Installed Uptime Kuma"
 

@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://gotify.net/
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -16,12 +16,12 @@ update_os
 msg_info "Installing Gotify"
 RELEASE=$(curl -fsSL https://api.github.com/repos/gotify/server/releases/latest | grep "tag_name" | awk '{print substr($2, 3, length($2)-4) }')
 mkdir -p /opt/gotify
-cd /opt/gotify
+cd /opt/gotify || exit
 curl -fsSL "https://github.com/gotify/server/releases/download/v${RELEASE}/gotify-linux-amd64.zip" -o $(basename "https://github.com/gotify/server/releases/download/v${RELEASE}/gotify-linux-amd64.zip")
 unzip -q gotify-linux-amd64.zip
 rm -rf gotify-linux-amd64.zip
 chmod +x gotify-linux-amd64
-echo "${RELEASE}" >/opt/${APPLICATION}_version.txt
+echo "${RELEASE}" >/opt/"${APPLICATION}"_version.txt
 msg_ok "Installed Gotify"
 
 msg_info "Creating Service"

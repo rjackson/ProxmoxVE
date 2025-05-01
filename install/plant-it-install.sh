@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 community-scripts ORG
 # Author: MickLesk (CanbiZ)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://plant-it.org/
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -79,7 +79,7 @@ CACHE_HOST=localhost
 CACHE_PORT=6379
 EOF
 
-cd /opt/plant-it/frontend
+cd /opt/plant-it/frontend || exit
 curl -fsSL "https://github.com/MDeLuise/plant-it/releases/download/${RELEASE}/client.tar.gz" -o $(basename "https://github.com/MDeLuise/plant-it/releases/download/${RELEASE}/client.tar.gz")
 tar -xzf client.tar.gz
 echo "${RELEASE}" >"/opt/${APPLICATION}_version.txt"

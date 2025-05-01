@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 community-scripts ORG
 # Author: liecno
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://github.com/FunkeyFlo/ps5-mqtt/
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -34,13 +34,13 @@ msg_ok "Installed Node.js"
 
 msg_info "Installing PS5-MQTT"
 RELEASE=$(curl -fsSL https://api.github.com/repos/FunkeyFlo/ps5-mqtt/releases/latest | jq -r '.tag_name')
-curl -fsSL https://github.com/FunkeyFlo/ps5-mqtt/archive/refs/tags/${RELEASE}.tar.gz -o /tmp/${RELEASE}.tar.gz
-tar zxf /tmp/${RELEASE}.tar.gz -C /opt
+curl -fsSL https://github.com/FunkeyFlo/ps5-mqtt/archive/refs/tags/"${RELEASE}".tar.gz -o /tmp/"${RELEASE}".tar.gz
+tar zxf /tmp/"${RELEASE}".tar.gz -C /opt
 mv /opt/ps5-mqtt-* /opt/ps5-mqtt
-cd /opt/ps5-mqtt/ps5-mqtt/
+cd /opt/ps5-mqtt/ps5-mqtt/ || exit
 $STD npm install
 $STD npm run build
-echo ${RELEASE} >/opt/ps5-mqtt_version.txt
+echo "${RELEASE}" >/opt/ps5-mqtt_version.txt
 msg_ok "Installed PS5-MQTT"
 
 msg_info "Creating Service"
@@ -103,5 +103,5 @@ customize
 msg_info "Cleaning up"
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean
-rm /tmp/${RELEASE}.tar.gz
+rm /tmp/"${RELEASE}".tar.gz
 msg_ok "Cleaned"

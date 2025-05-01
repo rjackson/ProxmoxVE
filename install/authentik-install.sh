@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 community-scripts ORG
 # Author: remz1337
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://goauthentik.io/
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -37,14 +37,14 @@ $STD apt-get install -y \
 msg_ok "Installed Dependencies"
 
 msg_info "Installing yq"
-cd /tmp
+cd /tmp || exit
 YQ_LATEST="$(curl -fsSL https://api.github.com/repos/mikefarah/yq/releases/latest | grep -Po '"tag_name": "\K.*?(?=")')"
 curl -fsSL "https://github.com/mikefarah/yq/releases/download/${YQ_LATEST}/yq_linux_amd64" -o /usr/bin/yq
 chmod +x /usr/bin/yq
 msg_ok "Installed yq"
 
 msg_info "Installing GeoIP"
-cd /tmp
+cd /tmp || exit
 GEOIP_RELEASE=$(curl -fsSL https://api.github.com/repos/maxmind/geoipupdate/releases/latest | grep "tag_name" | awk '{print substr($2, 3, length($2)-4) }')
 curl -fsSL "https://github.com/maxmind/geoipupdate/releases/download/v${GEOIP_RELEASE}/geoipupdate_${GEOIP_RELEASE}_linux_amd64.deb" -o "geoipupdate.deb"
 $STD dpkg -i geoipupdate.deb
@@ -57,13 +57,13 @@ EOF
 msg_ok "Installed GeoIP"
 
 msg_info "Setting up Python 3"
-cd /tmp
+cd /tmp || exit
 curl -fsSL "https://www.python.org/ftp/python/3.12.1/Python-3.12.1.tgz" -o "Python.tgz"
 tar -zxf Python.tgz
-cd Python-3.12.1
+cd Python-3.12.1 || exit
 $STD ./configure --enable-optimizations
 $STD make altinstall
-cd ~
+cd ~ || exit
 $STD update-alternatives --install /usr/bin/python3 python3 /usr/local/bin/python3.12 1
 msg_ok "Setup Python 3"
 
@@ -111,18 +111,18 @@ RELEASE=$(curl -fsSL https://api.github.com/repos/goauthentik/authentik/releases
 mkdir -p /opt/authentik
 curl -fsSL "${RELEASE}" -o "authentik.tar.gz"
 tar -xzf authentik.tar.gz -C /opt/authentik --strip-components 1 --overwrite
-cd /opt/authentik/website
+cd /opt/authentik/website || exit
 $STD npm install
 $STD npm run build-bundled
-cd /opt/authentik/web
+cd /opt/authentik/web || exit
 $STD npm install
 $STD npm run build
-echo "${RELEASE}" >/opt/${APPLICATION}_version.txt
-cd /opt/authentik
+echo "${RELEASE}" >/opt/"${APPLICATION}"_version.txt
+cd /opt/authentik || exit
 $STD go mod download
 $STD go build -o /go/authentik ./cmd/server
 $STD go build -o /opt/authentik/authentik-server /opt/authentik/cmd/server/
-cd /opt/authentik
+cd /opt/authentik || exit
 $STD pip3 install --upgrade pip
 $STD pip3 install poetry poetry-plugin-export
 ln -s /usr/local/bin/poetry /usr/bin/poetry
@@ -141,7 +141,7 @@ ln -s /usr/bin/python3 /usr/bin/python
 ln -s /usr/local/bin/gunicorn /usr/bin/gunicorn
 ln -s /usr/local/bin/celery /usr/bin/celery
 $STD bash /opt/authentik/lifecycle/ak migrate
-cd ~
+cd ~ || exit
 msg_ok "Installed authentik"
 
 msg_info "Creating Services"

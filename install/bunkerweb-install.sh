@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://www.bunkerweb.io/
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -31,13 +31,13 @@ msg_info "Installing BunkerWeb v${RELEASE} (Patience)"
 curl -fsSL "https://repo.bunkerweb.io/bunkerity/bunkerweb/gpgkey" | gpg --dearmor >/etc/apt/keyrings/bunkerity_bunkerweb-archive-keyring.gpg
 echo "deb [signed-by=/etc/apt/keyrings/bunkerity_bunkerweb-archive-keyring.gpg] https://repo.bunkerweb.io/bunkerity/bunkerweb/debian/ bookworm main" >/etc/apt/sources.list.d/bunkerity_bunkerweb.list
 $STD apt-get update
-$STD apt-get install -y bunkerweb=${RELEASE}
+$STD apt-get install -y bunkerweb="${RELEASE}"
 cat <<EOF >/etc/apt/preferences.d/bunkerweb
 Package: bunkerweb
 Pin: version ${RELEASE}
 Pin-Priority: 1001
 EOF
-echo "${RELEASE}" >/opt/${APPLICATION}_version.txt
+echo "${RELEASE}" >/opt/"${APPLICATION}"_version.txt
 msg_ok "Installed BunkerWeb v${RELEASE}"
 
 motd_ssh

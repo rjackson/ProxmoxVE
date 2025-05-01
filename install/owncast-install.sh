@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://owncast.online/
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -19,7 +19,7 @@ msg_ok "Installed Dependencies"
 
 msg_info "Installing Owncast"
 mkdir /opt/owncast
-cd /opt/owncast
+cd /opt/owncast || exit
 curl -fsSL "$(curl -fsSL https://api.github.com/repos/owncast/owncast/releases/latest | grep download | grep linux-64bit | cut -d\" -f4)" -o $(basename "$(curl -fsSL https://api.github.com/repos/owncast/owncast/releases/latest | grep download | grep linux-64bit | cut -d\" -f4)")
 $STD unzip owncast*.zip
 rm owncast*.zip

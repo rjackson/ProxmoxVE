@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://www.kavitareader.com/
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -14,9 +14,9 @@ network_check
 update_os
 
 msg_info "Installing Kavita"
-cd /opt
+cd /opt || exit
 RELEASE=$(curl -fsSL https://api.github.com/repos/Kareadita/Kavita/releases/latest | grep "tag_name" | awk '{print substr($2, 2, length($2)-3) }')
-$STD tar -xvzf <(curl -fsSL https://github.com/Kareadita/Kavita/releases/download/$RELEASE/kavita-linux-x64.tar.gz) --no-same-owner
+$STD tar -xvzf <(curl -fsSL https://github.com/Kareadita/Kavita/releases/download/"$RELEASE"/kavita-linux-x64.tar.gz) --no-same-owner
 msg_ok "Installed Kavita"
 
 msg_info "Creating Service"

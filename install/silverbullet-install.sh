@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 community-scripts ORG
 # Author: Dominik Siebel (dsiebel)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://silverbullet.md
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -19,7 +19,7 @@ mkdir -p /opt/silverbullet/bin /opt/silverbullet/space
 curl -fsSL "https://github.com/silverbulletmd/silverbullet/releases/download/${RELEASE}/silverbullet-server-linux-x86_64.zip" -o $(basename "https://github.com/silverbulletmd/silverbullet/releases/download/${RELEASE}/silverbullet-server-linux-x86_64.zip")
 unzip -oq -d /opt/silverbullet/bin/ silverbullet-server-linux-x86_64.zip
 chmod +x /opt/silverbullet/bin/silverbullet
-echo "${RELEASE}" >/opt/${APPLICATION}_version.txt
+echo "${RELEASE}" >/opt/"${APPLICATION}"_version.txt
 msg_ok "Installed Silverbullet"
 
 msg_info "Creating Service"

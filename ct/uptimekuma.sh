@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-source <(curl -fsSL https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func)
+source <(curl -fsSL https://raw.githubusercontent.com/rjackson/ProxmoxVE/main/misc/build.func)
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://uptime.kuma.pet/
 
 APP="Uptime Kuma"
@@ -39,11 +39,11 @@ function update_script() {
   $STD sudo systemctl stop uptime-kuma
   msg_ok "Stopped ${APP}"
 
-  cd /opt/uptime-kuma
+  cd /opt/uptime-kuma || exit
 
   msg_info "Pulling ${APP} ${LATEST}"
   $STD git fetch --all
-  $STD git checkout $LATEST --force
+  $STD git checkout "$LATEST" --force
   msg_ok "Pulled ${APP} ${LATEST}"
 
   msg_info "Updating ${APP} to ${LATEST}"

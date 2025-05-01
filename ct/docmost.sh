@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-source <(curl -fsSL https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func)
+source <(curl -fsSL https://raw.githubusercontent.com/rjackson/ProxmoxVE/main/misc/build.func)
 # Copyright (c) 2021-2025 community-scripts ORG
 # Author: MickLesk (CanbiZ)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://docmost.com/
 
 APP="Docmost"
@@ -53,8 +53,8 @@ function update_script() {
     temp_file=$(mktemp)
     curl -fsSL "https://github.com/docmost/docmost/archive/refs/tags/v${RELEASE}.tar.gz" -o "$temp_file"
     tar -xzf "$temp_file"
-    mv docmost-${RELEASE} /opt/docmost
-    cd /opt/docmost
+    mv docmost-"${RELEASE}" /opt/docmost
+    cd /opt/docmost || exit
     mv /opt/.env /opt/docmost/.env
     mv /opt/data /opt/docmost/data
     $STD pnpm install --force
@@ -67,7 +67,7 @@ function update_script() {
     msg_ok "Started ${APP}"
 
     msg_info "Cleaning Up"
-    rm -f ${temp_file}
+    rm -f "${temp_file}"
     msg_ok "Cleaned"
     msg_ok "Updated Successfully"
   else

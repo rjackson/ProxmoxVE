@@ -2,7 +2,7 @@
 
 #Copyright (c) 2021-2025 community-scripts ORG
 # Author: Michel Roegl-Brunner (michelroegl-brunner)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://https://cosmos-cloud.io/
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -38,11 +38,11 @@ mkdir -p /opt/cosmos
 LATEST_RELEASE=$(curl -fsSL https://api.github.com/repos/azukaar/Cosmos-Server/releases/latest | grep "tag_name" | cut -d '"' -f 4)
 ZIP_FILE="cosmos-cloud-${LATEST_RELEASE#v}-amd64.zip"
 curl -fsSL "https://github.com/azukaar/Cosmos-Server/releases/download/${LATEST_RELEASE}/${ZIP_FILE}" -o "/opt/cosmos/${ZIP_FILE}"
-cd /opt/cosmos
+cd /opt/cosmos || exit
 unzip -o -q "${ZIP_FILE}"
 LATEST_RELEASE_NO_V=${LATEST_RELEASE#v}
-mv /opt/cosmos/cosmos-cloud-${LATEST_RELEASE_NO_V}/* /opt/cosmos/
-rmdir /opt/cosmos/cosmos-cloud-${LATEST_RELEASE_NO_V}
+mv /opt/cosmos/cosmos-cloud-"${LATEST_RELEASE_NO_V}"/* /opt/cosmos/
+rmdir /opt/cosmos/cosmos-cloud-"${LATEST_RELEASE_NO_V}"
 chmod +x /opt/cosmos/cosmos
 msg_ok "Installed Cosmos"
 

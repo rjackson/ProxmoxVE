@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://gethomepage.dev/
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -33,12 +33,12 @@ LOCAL_IP=$(hostname -I | awk '{print $1}')
 RELEASE=$(curl -fsSL https://api.github.com/repos/gethomepage/homepage/releases/latest | grep "tag_name" | awk '{print substr($2, 3, length($2)-4) }')
 msg_info "Installing Homepage v${RELEASE} (Patience)"
 curl -fsSL "https://github.com/gethomepage/homepage/archive/refs/tags/v${RELEASE}.tar.gz" -o $(basename "https://github.com/gethomepage/homepage/archive/refs/tags/v${RELEASE}.tar.gz")
-$STD tar -xzf v${RELEASE}.tar.gz
-rm -rf v${RELEASE}.tar.gz
+$STD tar -xzf v"${RELEASE}".tar.gz
+rm -rf v"${RELEASE}".tar.gz
 mkdir -p /opt/homepage/config
-mv homepage-${RELEASE}/* /opt/homepage
-rm -rf homepage-${RELEASE}
-cd /opt/homepage
+mv homepage-"${RELEASE}"/* /opt/homepage
+rm -rf homepage-"${RELEASE}"
+cd /opt/homepage || exit
 cp /opt/homepage/src/skeleton/* /opt/homepage/config
 $STD pnpm install
 export NEXT_PUBLIC_VERSION="v$RELEASE"
@@ -46,7 +46,7 @@ export NEXT_PUBLIC_REVISION="source"
 export NEXT_TELEMETRY_DISABLED=1
 $STD pnpm build
 echo "HOMEPAGE_ALLOWED_HOSTS=localhost:3000,${LOCAL_IP}:3000" >/opt/homepage/.env
-echo "${RELEASE}" >/opt/${APPLICATION}_version.txt
+echo "${RELEASE}" >/opt/"${APPLICATION}"_version.txt
 msg_ok "Installed Homepage v${RELEASE}"
 
 msg_info "Creating Service"

@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 community-scripts ORG
 # Author: MickLesk (Canbiz)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://docmost.com/
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -53,10 +53,10 @@ msg_ok "Set up PostgreSQL"
 msg_info "Installing Docmost (Patience)"
 temp_file=$(mktemp)
 RELEASE=$(curl -fsSL https://api.github.com/repos/docmost/docmost/releases/latest | grep "tag_name" | awk '{print substr($2, 3, length($2)-4) }')
-curl -fsSL "https://github.com/docmost/docmost/archive/refs/tags/v${RELEASE}.tar.gz" -o ""$temp_file""
+curl -fsSL "https://github.com/docmost/docmost/archive/refs/tags/v${RELEASE}.tar.gz" -o """$temp_file"""
 tar -xzf "$temp_file"
-mv docmost-${RELEASE} /opt/docmost
-cd /opt/docmost
+mv docmost-"${RELEASE}" /opt/docmost
+cd /opt/docmost || exit
 mv .env.example .env
 mkdir data
 sed -i -e "s|APP_SECRET=.*|APP_SECRET=$(openssl rand -base64 32 | tr -dc 'a-zA-Z0-9' | cut -c1-32)|" \

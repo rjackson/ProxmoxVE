@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://shinobi.video/
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -36,9 +36,9 @@ $STD apt-get install -y ffmpeg
 msg_ok "Installed FFMPEG"
 
 msg_info "Cloning Shinobi"
-cd /opt
+cd /opt || exit
 $STD git clone https://gitlab.com/Shinobi-Systems/Shinobi.git -b master Shinobi
-cd Shinobi
+cd Shinobi || exit
 gitVersionNumber=$(git rev-parse HEAD)
 theDateRightNow=$(date)
 touch version.json

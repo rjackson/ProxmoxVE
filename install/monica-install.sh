@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 community-scripts ORG
 # Author: bvdberg01
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://www.monicahq.com/
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -49,11 +49,11 @@ msg_ok "Installed Node.js/Yarn"
 
 msg_info "Installing monica"
 RELEASE=$(curl -fsSL https://api.github.com/repos/monicahq/monica/releases/latest | grep "tag_name" | awk '{print substr($2, 3, length($2)-4) }')
-cd /opt
+cd /opt || exit
 curl -fsSL "https://github.com/monicahq/monica/releases/download/v${RELEASE}/monica-v${RELEASE}.tar.bz2" -o $(basename "https://github.com/monicahq/monica/releases/download/v${RELEASE}/monica-v${RELEASE}.tar.bz2")
 tar -xjf "monica-v${RELEASE}.tar.bz2"
 mv "/opt/monica-v${RELEASE}" /opt/monica
-cd /opt/monica
+cd /opt/monica || exit
 cp /opt/monica/.env.example /opt/monica/.env
 HASH_SALT=$(openssl rand -base64 32)
 sed -i -e "s|^DB_USERNAME=.*|DB_USERNAME=${DB_USER}|" \
@@ -67,7 +67,7 @@ $STD php artisan key:generate
 $STD php artisan setup:production --email=admin@helper-scripts.com --password=helper-scripts.com --force
 chown -R www-data:www-data /opt/monica
 chmod -R 775 /opt/monica/storage
-echo "${RELEASE}" >/opt/${APPLICATION}_version.txt
+echo "${RELEASE}" >/opt/"${APPLICATION}"_version.txt
 msg_ok "Installed monica"
 
 msg_info "Creating Service"

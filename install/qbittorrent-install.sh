@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 community-scripts ORG
 # Author: tteck (tteckster) | Co-Author: Slaviša Arežina (tremor021)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://www.qbittorrent.org/
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -15,12 +15,12 @@ update_os
 
 msg_info "Setup qBittorrent-nox"
 FULLRELEASE=$(curl -fsSL https://api.github.com/repos/userdocs/qbittorrent-nox-static/releases/latest | grep "tag_name" | awk '{print substr($2, 2, length($2)-3) }')
-RELEASE=$(echo $FULLRELEASE | cut -c 9-13)
+RELEASE=$(echo "$FULLRELEASE" | cut -c 9-13)
 mkdir -p /opt/qbittorrent
 curl -fsSL "https://github.com/userdocs/qbittorrent-nox-static/releases/download/${FULLRELEASE}/x86_64-qbittorrent-nox" -o /opt/qbittorrent/qbittorrent-nox
 chmod +x /opt/qbittorrent/qbittorrent-nox
-mkdir -p $HOME/.config/qBittorrent/
-cat <<EOF >$HOME/.config/qBittorrent/qBittorrent.conf
+mkdir -p "$HOME"/.config/qBittorrent/
+cat <<EOF >"$HOME"/.config/qBittorrent/qBittorrent.conf
 [LegalNotice]
 Accepted=true
 
@@ -30,7 +30,7 @@ WebUI\Port=8090
 WebUI\UseUPnP=false
 WebUI\Username=admin
 EOF
-echo "${RELEASE}" >/opt/${APPLICATION}_version.txt
+echo "${RELEASE}" >/opt/"${APPLICATION}"_version.txt
 msg_ok "Setup qBittorrent-nox"
 
 msg_info "Creating Service"

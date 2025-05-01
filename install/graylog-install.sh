@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 community-scripts ORG
 # Author: Slaviša Arežina (tremor021)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://graylog.org/
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -44,7 +44,7 @@ ROOT_PASSWORD=$(openssl rand -base64 18 | tr -dc 'a-zA-Z0-9' | head -c16)
   echo "Admin User: admin"
   echo "Admin Password: ${ROOT_PASSWORD}"
 } >>~/graylog.creds
-ROOT_PASSWORD=$(echo -n $ROOT_PASSWORD | shasum -a 256 | awk '{print $1}')
+ROOT_PASSWORD=$(echo -n "$ROOT_PASSWORD" | shasum -a 256 | awk '{print $1}')
 sed -i "s/password_secret =/password_secret = $PASSWORD_SECRET/g" /etc/graylog/server/server.conf
 sed -i "s/root_password_sha2 =/root_password_sha2 = $ROOT_PASSWORD/g" /etc/graylog/server/server.conf
 sed -i 's/#http_bind_address = 127.0.0.1.*/http_bind_address = 0.0.0.0:9000/g' /etc/graylog/server/server.conf

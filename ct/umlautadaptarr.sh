@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-source <(curl -fsSL https://raw.githubusercontent.com/community-scripts/ProxmoxVE/refs/heads/main/misc/build.func)
+source <(curl -fsSL https://raw.githubusercontent.com/rjackson/ProxmoxVE/refs/heads/main/misc/build.func)
 # Copyright (c) 2021-2025 community-scripts ORG
 # Author: elvito
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://github.com/PCJones/UmlautAdaptarr
 
 APP="UmlautAdaptarr"
@@ -35,8 +35,8 @@ function update_script() {
 
         msg_info "Updating ${APP}"
         temp_file=$(mktemp)
-        curl -fsSL "https://github.com/PCJones/Umlautadaptarr/releases/download/${RELEASE}/linux-x64.zip" -o $temp_file
-        $STD unzip -u $temp_file '*/**' -d /opt/UmlautAdaptarr
+        curl -fsSL "https://github.com/PCJones/Umlautadaptarr/releases/download/${RELEASE}/linux-x64.zip" -o "$temp_file"
+        $STD unzip -u "$temp_file" '*/**' -d /opt/UmlautAdaptarr
         msg_ok "Updated ${APP}"
 
         msg_info "Starting Service"

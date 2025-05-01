@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://nextcloud.com/
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -181,7 +181,7 @@ msg_ok "Started Services"
 
 msg_info "Start Nextcloud Setup-Wizard"
 echo -e "export VISUAL=nano\nexport EDITOR=nano" >>/etc/profile
-cd /usr/share/webapps/nextcloud
+cd /usr/share/webapps/nextcloud || exit
 $STD su nextcloud -s /bin/sh -c "php83 occ maintenance:install \
 --database='mysql' --database-name $DB_NAME \
 --database-user '$DB_USER' --database-pass '$DB_PASS' \

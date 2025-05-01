@@ -3,7 +3,7 @@
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://github.com/community-scripts/rjackson/raw/main/LICENSE
 
 function header_info {
   clear
@@ -52,9 +52,9 @@ curl -fsSL "https://github.com/webmin/webmin/releases/download/$LATEST/webmin_${
 msg_ok "Downloaded Webmin"
 
 msg_info "Installing Webmin"
-dpkg -i webmin_${LATEST}_all.deb &>/dev/null
+dpkg -i webmin_"${LATEST}"_all.deb &>/dev/null
 /usr/share/webmin/changepass.pl /etc/webmin root root &>/dev/null
-rm -rf /root/webmin_${LATEST}_all.deb
+rm -rf /root/webmin_"${LATEST}"_all.deb
 msg_ok "Installed Webmin"
 
 IP=$(hostname -I | cut -f1 -d ' ')

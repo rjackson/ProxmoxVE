@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 community-scripts ORG
 # Author: kristocopani
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://www.inspircd.org/
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -15,7 +15,7 @@ update_os
 
 msg_info "Installing InspIRCd"
 RELEASE=$(curl -fsSL https://api.github.com/repos/inspircd/inspircd/releases/latest | grep "tag_name" | awk '{print substr($2, 3, length($2)-4) }')
-cd /opt
+cd /opt || exit
 curl -fsSL "https://github.com/inspircd/inspircd/releases/download/v${RELEASE}/inspircd_${RELEASE}.deb12u1_amd64.deb" -o $(basename "https://github.com/inspircd/inspircd/releases/download/v${RELEASE}/inspircd_${RELEASE}.deb12u1_amd64.deb")
 $STD apt-get install "./inspircd_${RELEASE}.deb12u1_amd64.deb" -y &>/dev/null
 cat <<EOF >/etc/inspircd/inspircd.conf
@@ -40,7 +40,7 @@ motd_ssh
 customize
 
 msg_info "Cleaning up"
-rm -rf /opt/inspircd_${RELEASE}.deb12u1_amd64.deb
+rm -rf /opt/inspircd_"${RELEASE}".deb12u1_amd64.deb
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean
 msg_ok "Cleaned"

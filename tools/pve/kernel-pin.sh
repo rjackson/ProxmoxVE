@@ -3,7 +3,7 @@
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://github.com/community-scripts/rjackson/raw/main/LICENSE
 
 function header_info {
   clear
@@ -62,7 +62,7 @@ pin_kernel=$(whiptail --backtitle "Proxmox VE Helper Scripts" --title "Current K
 whiptail --backtitle "Proxmox VE Helper Scripts" --title "Proxmox VE Kernel Pin" --yesno "Would you like to pin the $pin_kernel Kernel?" 10 68
 
 msg_info "Pinning $pin_kernel"
-proxmox-boot-tool kernel pin $pin_kernel &>/dev/null
+proxmox-boot-tool kernel pin "$pin_kernel" &>/dev/null
 msg_ok "Successfully Pinned $pin_kernel\n"
 proxmox-boot-tool kernel list
 echo ""

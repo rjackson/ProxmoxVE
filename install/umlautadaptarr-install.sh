@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 community-scripts ORG
 # Author: elvito
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://github.com/PCJones/UmlautAdaptarr
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -25,8 +25,8 @@ msg_ok "Installed Dependencies"
 msg_info "Installing Umlautadaptarr"
 temp_file=$(mktemp)
 RELEASE=$(curl -s https://api.github.com/repos/PCJones/Umlautadaptarr/releases/latest | grep "tag_name" | awk '{print substr($2, 2, length($2)-3)}')
-curl -fsSL "https://github.com/PCJones/Umlautadaptarr/releases/download/${RELEASE}/linux-x64.zip" -o $temp_file
-unzip -qj $temp_file '*/**' -d /opt/UmlautAdaptarr
+curl -fsSL "https://github.com/PCJones/Umlautadaptarr/releases/download/${RELEASE}/linux-x64.zip" -o "$temp_file"
+unzip -qj "$temp_file" '*/**' -d /opt/UmlautAdaptarr
 echo "${RELEASE}" >"/opt/UmlautAdaptarr_version.txt"
 msg_ok "Installation completed"
 
@@ -116,7 +116,7 @@ motd_ssh
 customize
 
 msg_info "Cleaning up"
-rm -f $temp_file
+rm -f "$temp_file"
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean
 msg_ok "Cleaned"

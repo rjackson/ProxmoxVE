@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster) | Co-Author Slaviša Arežina (tremor021)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://magicmirror.builders/
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -31,10 +31,10 @@ msg_ok "Installed Node.js"
 msg_info "Setup MagicMirror"
 temp_file=$(mktemp)
 RELEASE=$(curl -fsSL https://api.github.com/repos/MagicMirrorOrg/MagicMirror/releases/latest | grep "tag_name" | awk '{print substr($2, 3, length($2)-4) }')
-curl -fsSL "https://github.com/MagicMirrorOrg/MagicMirror/archive/refs/tags/v${RELEASE}.tar.gz" -o ""$temp_file""
+curl -fsSL "https://github.com/MagicMirrorOrg/MagicMirror/archive/refs/tags/v${RELEASE}.tar.gz" -o """$temp_file"""
 tar -xzf "$temp_file"
-mv MagicMirror-${RELEASE} /opt/magicmirror
-cd /opt/magicmirror
+mv MagicMirror-"${RELEASE}" /opt/magicmirror
+cd /opt/magicmirror || exit
 $STD npm run install-mm
 cat <<EOF >/opt/magicmirror/config/config.js
 let config = {
@@ -153,7 +153,7 @@ motd_ssh
 customize
 
 msg_info "Cleaning up"
-rm -rf $temp_file
+rm -rf "$temp_file"
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean
 msg_ok "Cleaned"

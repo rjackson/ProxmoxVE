@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://readeck.org/en/
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -16,7 +16,7 @@ update_os
 msg_info "Installing Readeck"
 LATEST=$(curl -fsSL https://codeberg.org/readeck/readeck/releases/ | grep -oP '(?<=Version )\d+\.\d+\.\d+' | head -1)
 mkdir -p /opt/readeck
-cd /opt/readeck
+cd /opt/readeck || exit
 curl -fsSL "https://codeberg.org/readeck/readeck/releases/download/${LATEST}/readeck-${LATEST}-linux-amd64" -o "readeck"
 chmod a+x readeck
 msg_ok "Installed Readeck"

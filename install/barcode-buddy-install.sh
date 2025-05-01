@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 community-scripts ORG
 # Author: bvdberg01
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://github.com/Forceu/barcodebuddy
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -23,12 +23,12 @@ msg_ok "Installed Dependencies"
 
 msg_info "Installing barcodebuddy"
 RELEASE=$(curl -fsSL https://api.github.com/repos/Forceu/barcodebuddy/releases/latest | grep "tag_name" | awk '{print substr($2, 3, length($2)-4) }')
-cd /opt
+cd /opt || exit
 curl -fsSL "https://github.com/Forceu/barcodebuddy/archive/refs/tags/v${RELEASE}.zip" -o $(basename "https://github.com/Forceu/barcodebuddy/archive/refs/tags/v${RELEASE}.zip")
 unzip -q "v${RELEASE}.zip"
 mv "/opt/barcodebuddy-${RELEASE}" /opt/barcodebuddy
 chown -R www-data:www-data /opt/barcodebuddy/data
-echo "${RELEASE}" >/opt/${APPLICATION}_version.txt
+echo "${RELEASE}" >/opt/"${APPLICATION}"_version.txt
 msg_ok "Installed barcodebuddy"
 
 msg_info "Creating Services"

@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 community-scripts ORG
 # Author: Andy Grunwald (andygrunwald)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://github.com/apache/tika/
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -40,11 +40,11 @@ msg_ok "Setup OpenJDK"
 
 msg_info "Installing Apache Tika"
 mkdir -p /opt/apache-tika
-cd /opt/apache-tika
+cd /opt/apache-tika || exit
 RELEASE="$(curl -fsSL https://dlcdn.apache.org/tika/ | grep -oP '(?<=href=")[0-9]+\.[0-9]+\.[0-9]+(?=/")' | sort -V | tail -n1)"
 curl -fsSL "https://dlcdn.apache.org/tika/${RELEASE}/tika-server-standard-${RELEASE}.jar" -o $(basename "https://dlcdn.apache.org/tika/${RELEASE}/tika-server-standard-${RELEASE}.jar")
-mv tika-server-standard-${RELEASE}.jar tika-server-standard.jar
-echo "${RELEASE}" >/opt/${APPLICATION}_version.txt
+mv tika-server-standard-"${RELEASE}".jar tika-server-standard.jar
+echo "${RELEASE}" >/opt/"${APPLICATION}"_version.txt
 msg_ok "Installed Apache Tika"
 
 msg_info "Creating Service"

@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://forgejo.org/
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -22,8 +22,8 @@ msg_info "Installing Forgejo"
 mkdir -p /opt/forgejo
 RELEASE=$(curl -fsSL https://codeberg.org/api/v1/repos/forgejo/forgejo/releases/latest | grep -oP '"tag_name":\s*"\K[^"]+' | sed 's/^v//')
 curl -fsSL "https://codeberg.org/forgejo/forgejo/releases/download/v${RELEASE}/forgejo-${RELEASE}-linux-amd64" -o "/opt/forgejo/forgejo-$RELEASE-linux-amd64"
-chmod +x /opt/forgejo/forgejo-$RELEASE-linux-amd64
-ln -sf /opt/forgejo/forgejo-$RELEASE-linux-amd64 /usr/local/bin/forgejo
+chmod +x /opt/forgejo/forgejo-"$RELEASE"-linux-amd64
+ln -sf /opt/forgejo/forgejo-"$RELEASE"-linux-amd64 /usr/local/bin/forgejo
 msg_ok "Installed Forgejo"
 
 msg_info "Setting up Forgejo"

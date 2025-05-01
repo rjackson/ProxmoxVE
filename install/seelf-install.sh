@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 community-scripts ORG
 # Author: tremor021
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://github.com/YuukanOO/seelf
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -46,7 +46,7 @@ RELEASE=$(curl -fsSL https://api.github.com/repos/YuukanOO/seelf/releases/latest
 curl -fsSL "https://github.com/YuukanOO/seelf/archive/refs/tags/v${RELEASE}.tar.gz" -o $(basename "https://github.com/YuukanOO/seelf/archive/refs/tags/v${RELEASE}.tar.gz")
 tar -xzf v"${RELEASE}".tar.gz
 mv seelf-"${RELEASE}"/ /opt/seelf
-cd /opt/seelf
+cd /opt/seelf || exit
 $STD make build
 PASS=$(openssl rand -base64 18 | tr -dc 'a-zA-Z0-9' | head -c13)
 {

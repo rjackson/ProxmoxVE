@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 community-scripts ORG
 # Author: Nícolas Pastorello (opastorello)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://www.paymenter.org
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -47,7 +47,7 @@ msg_info "Installing Paymenter"
 RELEASE=$(curl -fsSL https://api.github.com/repos/paymenter/paymenter/releases/latest | grep '"tag_name"' | sed -E 's/.*"tag_name": "([^"]+)".*/\1/')
 echo "${RELEASE}" >/opt/"${APPLICATION}"_version.txt
 mkdir -p /opt/paymenter
-cd /opt/paymenter
+cd /opt/paymenter || exit
 curl -fsSL "https://github.com/paymenter/paymenter/releases/download/${RELEASE}/paymenter.tar.gz" -o paymenter.tar.gz
 $STD tar -xzvf paymenter.tar.gz
 chmod -R 755 storage/* bootstrap/cache/

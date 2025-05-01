@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 community-scripts ORG
 # Author: MickLesk (Canbiz)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://github.com/matze/wastebin
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -17,7 +17,7 @@ msg_info "Installing Wastebin"
 temp_file=$(mktemp)
 RELEASE=$(curl -fsSL https://api.github.com/repos/matze/wastebin/releases/latest | grep "tag_name" | awk '{print substr($2, 2, length($2)-3) }')
 curl -fsSL "https://github.com/matze/wastebin/releases/download/${RELEASE}/wastebin_${RELEASE}_x86_64-unknown-linux-musl.zip" -o "$temp_file"
-unzip -q $temp_file
+unzip -q "$temp_file"
 mkdir -p /opt/wastebin
 mv wastebin /opt/wastebin/
 chmod +x /opt/wastebin/wastebin
@@ -55,7 +55,7 @@ motd_ssh
 customize
 
 msg_info "Cleaning up"
-rm -f $temp_file
+rm -f "$temp_file"
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean
 msg_ok "Cleaned"

@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 community-scripts ORG
 # Author: bvdberg01
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://sabre.io/baikal/
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -37,7 +37,7 @@ msg_ok "Set up PostgreSQL"
 
 msg_info "Installing Baikal"
 RELEASE=$(curl -fsSL https://api.github.com/repos/sabre-io/Baikal/releases/latest | grep "tag_name" | awk '{print substr($2, 2, length($2)-3) }')
-cd /opt
+cd /opt || exit
 curl -fsSL "https://github.com/sabre-io/baikal/releases/download/${RELEASE}/baikal-${RELEASE}.zip" -o $(basename "https://github.com/sabre-io/baikal/releases/download/${RELEASE}/baikal-${RELEASE}.zip")
 unzip -q "baikal-${RELEASE}.zip"
 cat <<EOF >/opt/baikal/config/baikal.yaml
@@ -50,7 +50,7 @@ database:
 EOF
 chown -R www-data:www-data /opt/baikal/
 chmod -R 755 /opt/baikal/
-echo "${RELEASE}" >/opt/${APPLICATION}_version.txt
+echo "${RELEASE}" >/opt/"${APPLICATION}"_version.txt
 msg_ok "Installed Baikal"
 
 msg_info "Creating Service"

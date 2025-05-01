@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://zwave-js.github.io/zwave-js-ui/#/
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -16,10 +16,10 @@ update_os
 msg_info "Installing Z-Wave JS UI"
 mkdir -p /opt/zwave-js-ui
 mkdir -p /opt/zwave_store
-cd /opt/zwave-js-ui
+cd /opt/zwave-js-ui || exit
 RELEASE=$(curl -fsSL https://api.github.com/repos/zwave-js/zwave-js-ui/releases/latest | grep "tag_name" | awk '{print substr($2, 2, length($2)-3) }')
 curl -fsSL "https://github.com/zwave-js/zwave-js-ui/releases/download/${RELEASE}/zwave-js-ui-${RELEASE}-linux.zip" -o $(basename "https://github.com/zwave-js/zwave-js-ui/releases/download/${RELEASE}/zwave-js-ui-${RELEASE}-linux.zip")
-unzip -q zwave-js-ui-${RELEASE}-linux.zip
+unzip -q zwave-js-ui-"${RELEASE}"-linux.zip
 cat <<EOF >/opt/.env
 ZWAVEJS_EXTERNAL_CONFIG=/opt/zwave_store/.config-db
 STORE_DIR=/opt/zwave_store
@@ -50,7 +50,7 @@ motd_ssh
 customize
 
 msg_info "Cleaning up"
-rm zwave-js-ui-${RELEASE}-linux.zip
+rm zwave-js-ui-"${RELEASE}"-linux.zip
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean
 msg_ok "Cleaned"

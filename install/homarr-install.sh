@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 community-scripts ORG
 # Author: MickLesk (Canbiz)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://github.com/homarr-labs/homarr
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -39,15 +39,15 @@ $STD npm install -g pnpm@latest
 msg_ok "Installed Node.js/pnpm"
 
 msg_info "Installing Homarr (Patience)"
-cd /opt
+cd /opt || exit
 RELEASE=$(curl -fsSL https://api.github.com/repos/homarr-labs/homarr/releases/latest | grep "tag_name" | awk '{print substr($2, 3, length($2)-4) }')
 curl -fsSL "https://github.com/homarr-labs/homarr/archive/refs/tags/v${RELEASE}.zip" -o $(basename "https://github.com/homarr-labs/homarr/archive/refs/tags/v${RELEASE}.zip")
-unzip -q v${RELEASE}.zip
-mv homarr-${RELEASE} /opt/homarr
+unzip -q v"${RELEASE}".zip
+mv homarr-"${RELEASE}" /opt/homarr
 mkdir -p /opt/homarr_db
 touch /opt/homarr_db/db.sqlite
 SECRET_ENCRYPTION_KEY="$(openssl rand -hex 32)"
-cd /opt/homarr
+cd /opt/homarr || exit
 cat <<EOF >/opt/homarr/.env
 DB_DRIVER='better-sqlite3'
 DB_DIALECT='sqlite'
@@ -125,7 +125,7 @@ motd_ssh
 customize
 
 msg_info "Cleaning up"
-rm -rf /opt/v${RELEASE}.zip
+rm -rf /opt/v"${RELEASE}".zip
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean
 msg_ok "Cleaned"

@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://traefik.io/
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -25,7 +25,7 @@ curl -fsSL "https://github.com/traefik/traefik/releases/download/v${RELEASE}/tra
 tar -C /tmp -xzf traefik*.tar.gz
 mv /tmp/traefik /usr/bin/
 rm -rf traefik*.tar.gz
-echo "${RELEASE}" >/opt/${APPLICATION}_version.txt
+echo "${RELEASE}" >/opt/"${APPLICATION}"_version.txt
 msg_ok "Installed Traefik v${RELEASE}"
 
 msg_info "Creating Traefik configuration"

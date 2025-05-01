@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://github.com/aceberg/WatchYourLAN
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -20,8 +20,8 @@ msg_ok "Installed Dependencies"
 msg_info "Installing WatchYourLAN"
 RELEASE=$(curl -fsSL https://api.github.com/repos/aceberg/WatchYourLAN/releases/latest | grep -o '"tag_name": *"[^"]*"' | cut -d '"' -f 4)
 curl -fsSL "https://github.com/aceberg/WatchYourLAN/releases/download/$RELEASE/watchyourlan_${RELEASE}_linux_amd64.deb" -o $(basename "https://github.com/aceberg/WatchYourLAN/releases/download/$RELEASE/watchyourlan_${RELEASE}_linux_amd64.deb")
-$STD dpkg -i watchyourlan_${RELEASE}_linux_amd64.deb
-rm watchyourlan_${RELEASE}_linux_amd64.deb
+$STD dpkg -i watchyourlan_"${RELEASE}"_linux_amd64.deb
+rm watchyourlan_"${RELEASE}"_linux_amd64.deb
 mkdir /data
 cat <<EOF >/data/config.yaml
 arp_timeout: "500"

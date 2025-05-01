@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-source <(curl -fsSL https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func)
+source <(curl -fsSL https://raw.githubusercontent.com/rjackson/ProxmoxVE/main/misc/build.func)
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://nodered.org/
 
 APP="Node-Red"
@@ -82,7 +82,7 @@ function update_script() {
       3>&1 1>&2 2>&3)
     header_info
     msg_info "Installing ${THEME} Theme"
-    cd /root/.node-red
+    cd /root/.node-red || exit
     sed -i 's|// theme: ".*",|theme: "",|g' /root/.node-red/settings.js
     $STD npm install @node-red-contrib-themes/theme-collection
     sed -i "{s/theme: ".*"/theme: '${THEME}',/g}" /root/.node-red/settings.js

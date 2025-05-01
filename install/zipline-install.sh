@@ -3,7 +3,7 @@
 # Copyright (c) 2021-2025 tteck
 # Author: tteck
 # Co-Author: MickLesk (Canbiz)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://github.com/diced/zipline
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -50,12 +50,12 @@ echo -e "Zipline Secret: $SECRET_KEY" >>~/zipline.creds
 msg_ok "Set up PostgreSQL"
 
 msg_info "Installing Zipline (Patience)"
-cd /opt
+cd /opt || exit
 RELEASE=$(curl -fsSL https://api.github.com/repos/diced/zipline/releases/latest | grep "tag_name" | awk '{print substr($2, 3, length($2)-4) }')
 curl -fsSL "https://github.com/diced/zipline/archive/refs/tags/v${RELEASE}.zip" -o $(basename "https://github.com/diced/zipline/archive/refs/tags/v${RELEASE}.zip")
 unzip -q v"${RELEASE}".zip
 mv zipline-"${RELEASE}" /opt/zipline
-cd /opt/zipline
+cd /opt/zipline || exit
 cat <<EOF >/opt/zipline/.env
 DATABASE_URL=postgres://$DB_USER:$DB_PASS@localhost:5432/$DB_NAME
 CORE_SECRET=$SECRET_KEY

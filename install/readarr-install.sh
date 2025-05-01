@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://readarr.com/
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -20,7 +20,7 @@ msg_ok "Installed Dependencies"
 msg_info "Installing Readarr"
 mkdir -p /var/lib/readarr/
 chmod 775 /var/lib/readarr/
-cd /var/lib/readarr/
+cd /var/lib/readarr/ || exit
 $STD curl -fsSL 'https://readarr.servarr.com/v1/update/develop/updatefile?os=linux&runtime=netcore&arch=x64' -o readarr.tar.gz
 $STD tar -xvzf readarr.tar.gz
 mv Readarr /opt

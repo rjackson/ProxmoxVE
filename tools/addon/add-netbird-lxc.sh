@@ -4,7 +4,7 @@
 # Author: tteck (tteckster)
 # Co-Author: MickLesk (Canbiz)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://github.com/community-scripts/rjackson/raw/main/LICENSE
 
 function header_info {
   clear
@@ -72,7 +72,7 @@ if [[ "$DISTRO" != "debian" && "$DISTRO" != "ubuntu" ]]; then
 fi
 
 CTID_CONFIG_PATH=/etc/pve/lxc/${CTID}.conf
-cat <<EOF >>$CTID_CONFIG_PATH
+cat <<EOF >>"$CTID_CONFIG_PATH"
 lxc.cgroup2.devices.allow: c 10:200 rwm
 lxc.mount.entry: /dev/net/tun dev/net/tun none bind,create=file
 EOF

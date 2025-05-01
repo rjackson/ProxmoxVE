@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://openobserve.ai/
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -16,7 +16,7 @@ update_os
 msg_info "Installing OpenObserve"
 mkdir -p /opt/openobserve/data
 LATEST=$(curl -fsSL https://api.github.com/repos/openobserve/openobserve/releases/latest | grep '"tag_name":' | cut -d'"' -f4)
-$STD tar zxvf <(curl -fsSL https://github.com/openobserve/openobserve/releases/download/$LATEST/openobserve-${LATEST}-linux-amd64.tar.gz) -C /opt/openobserve
+$STD tar zxvf <(curl -fsSL https://github.com/openobserve/openobserve/releases/download/"$LATEST"/openobserve-"${LATEST}"-linux-amd64.tar.gz) -C /opt/openobserve
 
 cat <<EOF >/opt/openobserve/data/.env
 ZO_ROOT_USER_EMAIL = "admin@example.com"

@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-source <(curl -fsSL https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func)
+source <(curl -fsSL https://raw.githubusercontent.com/rjackson/ProxmoxVE/main/misc/build.func)
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster) | Co-Author Slaviša Arežina (tremor021)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://magicmirror.builders/
 
 APP="MagicMirror"
@@ -45,11 +45,11 @@ function update_script() {
     fi
     cp -r /opt/magicmirror/modules /opt/magicmirror-backup
     temp_file=$(mktemp)
-curl -fsSL "https://github.com/MagicMirrorOrg/MagicMirror/archive/refs/tags/v${RELEASE}.tar.gz" -o ""$temp_file""
+curl -fsSL "https://github.com/MagicMirrorOrg/MagicMirror/archive/refs/tags/v${RELEASE}.tar.gz" -o """$temp_file"""
     tar -xzf "$temp_file"
     rm -rf /opt/magicmirror
-    mv MagicMirror-${RELEASE} /opt/magicmirror
-    cd /opt/magicmirror
+    mv MagicMirror-"${RELEASE}" /opt/magicmirror
+    cd /opt/magicmirror || exit
     $STD npm run install-mm
     cp /opt/magicmirror-backup/config.js /opt/magicmirror/config/
     if [[ -f /opt/magicmirror-backup/custom.css ]]; then
@@ -63,7 +63,7 @@ curl -fsSL "https://github.com/MagicMirrorOrg/MagicMirror/archive/refs/tags/v${R
     msg_ok "Started Service"
 
     msg_info "Cleaning up"
-    rm -f $temp_file
+    rm -f "$temp_file"
     msg_ok "Cleaned"
     msg_ok "Updated Successfully"
   else

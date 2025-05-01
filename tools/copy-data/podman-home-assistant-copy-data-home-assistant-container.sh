@@ -3,7 +3,7 @@
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://github.com/community-scripts/rjackson/raw/main/LICENSE
 
 # Use to copy all data from a Podman Home Assistant LXC to a Docker Home Assistant LXC.
 # run from the Proxmox Shell
@@ -35,7 +35,7 @@ function error_exit() {
   local REASON="\e[97m${1:-$DEFAULT}\e[39m"
   local FLAG="\e[91m[ERROR] \e[93m$EXIT@$LINE"
   msg "$FLAG $REASON"
-  exit $EXIT
+  exit "$EXIT"
 }
 function warn() {
   local REASON="\e[97m$1\e[39m"
@@ -52,13 +52,13 @@ function msg() {
   echo -e "$TEXT"
 }
 function cleanup() {
-  [ -d "${CTID_FROM_PATH:-}" ] && pct unmount $CTID_FROM
-  [ -d "${CTID_TO_PATH:-}" ] && pct unmount $CTID_TO
+  [ -d "${CTID_FROM_PATH:-}" ] && pct unmount "$CTID_FROM"
+  [ -d "${CTID_TO_PATH:-}" ] && pct unmount "$CTID_TO"
   popd >/dev/null
-  rm -rf $TEMP_DIR
+  rm -rf "$TEMP_DIR"
 }
 TEMP_DIR=$(mktemp -d)
-pushd $TEMP_DIR >/dev/null
+pushd "$TEMP_DIR" >/dev/null
 
 TITLE="Home Assistant LXC Data Copy"
 while read -r line; do
@@ -84,33 +84,33 @@ while [ -z "${CTID_TO:+x}" ]; do
 done
 for i in ${!CTID_MENU[@]}; do
   [ "${CTID_MENU[$i]}" == "$CTID_FROM" ] &&
-    CTID_FROM_HOSTNAME=$(sed 's/[[:space:]]*$//' <<<${CTID_MENU[$i + 1]})
+    CTID_FROM_HOSTNAME=$(sed 's/[[:space:]]*$//' <<<"${CTID_MENU[$i + 1]}")
   [ "${CTID_MENU[$i]}" == "$CTID_TO" ] &&
-    CTID_TO_HOSTNAME=$(sed 's/[[:space:]]*$//' <<<${CTID_MENU[$i + 1]})
+    CTID_TO_HOSTNAME=$(sed 's/[[:space:]]*$//' <<<"${CTID_MENU[$i + 1]}")
 done
 whiptail --backtitle "Proxmox VE Helper Scripts" --defaultno --title "$TITLE" --yesno \
   "Are you sure you want to copy data between the following LXCs?
 $CTID_FROM (${CTID_FROM_HOSTNAME}) -> $CTID_TO (${CTID_TO_HOSTNAME})
 Version: 2022.03.31" 13 50
 info "Home Assistant Data from '$CTID_FROM' to '$CTID_TO'"
-if [ $(pct status $CTID_TO | sed 's/.* //') == 'running' ]; then
+if [ $(pct status "$CTID_TO" | sed 's/.* //') == 'running' ]; then
   msg "Stopping '$CTID_TO'..."
-  pct stop $CTID_TO
+  pct stop "$CTID_TO"
 fi
 msg "Mounting Container Disks..."
 DOCKER_PATH=/var/lib/docker/volumes/hass_config/
 PODMAN_PATH=/var/lib/containers/storage/volumes/hass_config/
-CTID_FROM_PATH=$(pct mount $CTID_FROM | sed -n "s/.*'\(.*\)'/\1/p") ||
+CTID_FROM_PATH=$(pct mount "$CTID_FROM" | sed -n "s/.*'\(.*\)'/\1/p") ||
   die "There was a problem mounting the root disk of LXC '${CTID_FROM}'."
 [ -d "${CTID_FROM_PATH}${PODMAN_PATH}" ] ||
   die "Home Assistant directories in '$CTID_FROM' not found."
-CTID_TO_PATH=$(pct mount $CTID_TO | sed -n "s/.*'\(.*\)'/\1/p") ||
+CTID_TO_PATH=$(pct mount "$CTID_TO" | sed -n "s/.*'\(.*\)'/\1/p") ||
   die "There was a problem mounting the root disk of LXC '${CTID_TO}'."
 [ -d "${CTID_TO_PATH}${DOCKER_PATH}" ] ||
   die "Home Assistant directories in '$CTID_TO' not found."
 
-rm -rf ${CTID_TO_PATH}${DOCKER_PATH}
-mkdir ${CTID_TO_PATH}${DOCKER_PATH}
+rm -rf "${CTID_TO_PATH}"${DOCKER_PATH}
+mkdir "${CTID_TO_PATH}"${DOCKER_PATH}
 
 msg "Copying Data Between Containers..."
 RSYNC_OPTIONS=(
@@ -122,11 +122,11 @@ RSYNC_OPTIONS=(
   --info=progress2
 )
 msg "<======== Data ========>"
-rsync ${RSYNC_OPTIONS[*]} ${CTID_FROM_PATH}${PODMAN_PATH} ${CTID_TO_PATH}${DOCKER_PATH}
+rsync "${RSYNC_OPTIONS[*]}" "${CTID_FROM_PATH}"${PODMAN_PATH} "${CTID_TO_PATH}"${DOCKER_PATH}
 echo -en "\e[1A\e[0K\e[1A\e[0K"
 
 info "Successfully Transferred Data."
 
 # Use to copy all data from a Podman Home Assistant LXC to a Docker Home Assistant LXC.
 # run from the Proxmox Shell
-# bash -c "$(curl -fsSL https://raw.githubusercontent.com/community-scripts/ProxmoxVE/mainmain/tools/copy-data//podman-home-assistant-copy-data-home-assistant-container.sh)"
+# bash -c "$(curl -fsSL https://raw.githubusercontent.com/rjackson/ProxmoxVE/mainmain/tools/copy-data//podman-home-assistant-copy-data-home-assistant-container.sh)"

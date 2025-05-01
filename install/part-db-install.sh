@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 community-scripts ORG
 # Author: bvdberg01
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://docs.part-db.de/
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -27,8 +27,8 @@ msg_ok "Installed Dependencies"
 
 msg_info "Setting up PHP"
 PHPVER=$(php -r 'echo PHP_MAJOR_VERSION . "." . PHP_MINOR_VERSION . "\n";')
-sed -i "s@post_max_size = 8M@post_max_size = 100M@g" /etc/php/${PHPVER}/apache2/php.ini
-sed -i "s@upload_max_filesize = 2M@upload_max_filesize = 100M@g" /etc/php/${PHPVER}/apache2/php.ini
+sed -i "s@post_max_size = 8M@post_max_size = 100M@g" /etc/php/"${PHPVER}"/apache2/php.ini
+sed -i "s@upload_max_filesize = 2M@upload_max_filesize = 100M@g" /etc/php/"${PHPVER}"/apache2/php.ini
 msg_ok "Setting up PHP"
 
 msg_info "Setting up PostgreSQL"
@@ -56,13 +56,13 @@ $STD npm install -g yarn
 msg_ok "Installed Node.js/Yarn"
 
 msg_info "Installing Part-DB (Patience)"
-cd /opt
+cd /opt || exit
 RELEASE=$(curl -fsSL https://api.github.com/repos/Part-DB/Part-DB-server/releases/latest | grep "tag_name" | awk '{print substr($2, 3, length($2)-4) }')
 curl -fsSL "https://github.com/Part-DB/Part-DB-server/archive/refs/tags/v${RELEASE}.zip" -o $(basename "https://github.com/Part-DB/Part-DB-server/archive/refs/tags/v${RELEASE}.zip")
 unzip -q "v${RELEASE}.zip"
-mv /opt/Part-DB-server-${RELEASE}/ /opt/partdb
+mv /opt/Part-DB-server-"${RELEASE}"/ /opt/partdb
 
-cd /opt/partdb/
+cd /opt/partdb/ || exit
 cp .env .env.local
 sed -i "s|DATABASE_URL=\"sqlite:///%kernel.project_dir%/var/app.db\"|DATABASE_URL=\"postgresql://${DB_USER}:${DB_PASS}@127.0.0.1:5432/${DB_NAME}?serverVersion=12.19&charset=utf8\"|" .env.local
 
@@ -79,7 +79,7 @@ ADMIN_PASS=$(grep -oP 'The initial password for the "admin" user is: \K\w+' ~/da
   echo "Part-DB Admin User: admin"
   echo "Part-DB Admin Password: $ADMIN_PASS"
 } >>~/partdb.creds
-echo "${RELEASE}" >/opt/${APPLICATION}_version.txt
+echo "${RELEASE}" >/opt/"${APPLICATION}"_version.txt
 msg_ok "Installed Part-DB"
 
 msg_info "Creating Service"

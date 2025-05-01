@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-source <(curl -fsSL https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func)
+source <(curl -fsSL https://raw.githubusercontent.com/rjackson/ProxmoxVE/main/misc/build.func)
 # Copyright (c) 2021-2025 community-scripts ORG
 # Author: tremor021
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://github.com/element-hq/synapse
 
 APP="Element Synapse"
@@ -57,7 +57,7 @@ function update_script() {
       mkdir -p /opt/synapse-admin
       curl -fsSL "https://github.com/etkecc/synapse-admin/archive/refs/tags/v${RELEASE}.tar.gz" -o "$temp_file"
       tar xzf "$temp_file" -C /opt/synapse-admin --strip-components=1
-      cd /opt/synapse-admin
+      cd /opt/synapse-admin || exit
       $STD yarn install --ignore-engines
       systemctl start synapse-admin
       echo "${RELEASE}" >/opt/"${APP}"_version.txt

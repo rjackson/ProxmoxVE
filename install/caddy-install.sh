@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster) | Co-Author: MickLesk (CanbiZ)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://caddyserver.com/
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -43,10 +43,10 @@ if [[ "${prompt,,}" =~ ^(y|yes)$ ]]; then
 
   msg_info "Setup xCaddy"
   $STD apt-get install -y git
-  cd /opt
+  cd /opt || exit
   RELEASE=$(curl -fsSL https://api.github.com/repos/caddyserver/xcaddy/releases/latest | grep "tag_name" | awk '{print substr($2, 2, length($2)-3) }')
   curl -fsSL "https://github.com/caddyserver/xcaddy/releases/download/${RELEASE}/xcaddy_${RELEASE:1}_linux_amd64.deb" -o $(basename "https://github.com/caddyserver/xcaddy/releases/download/${RELEASE}/xcaddy_${RELEASE:1}_linux_amd64.deb")
-  $STD dpkg -i xcaddy_${RELEASE:1}_linux_amd64.deb
+  $STD dpkg -i xcaddy_"${RELEASE:1}"_linux_amd64.deb
   rm -rf /opt/xcaddy*
   $STD xcaddy build
   msg_ok "Setup xCaddy"

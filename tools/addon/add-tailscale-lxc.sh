@@ -3,7 +3,7 @@
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://github.com/community-scripts/rjackson/raw/main/LICENSE
 
 function header_info {
   clear
@@ -53,7 +53,7 @@ while [ -z "${CTID:+x}" ]; do
 done
 
 CTID_CONFIG_PATH=/etc/pve/lxc/${CTID}.conf
-cat <<EOF >>$CTID_CONFIG_PATH
+cat <<EOF >>"$CTID_CONFIG_PATH"
 lxc.cgroup2.devices.allow: c 10:200 rwm
 lxc.mount.entry: /dev/net/tun dev/net/tun none bind,create=file
 EOF
@@ -67,7 +67,7 @@ echo "deb [signed-by=/usr/share/keyrings/tailscale-archive-keyring.gpg] https://
 apt-get update &>/dev/null
 apt-get install -y tailscale &>/dev/null
 '
-TAGS=$(awk -F': ' '/^tags:/ {print $2}' /etc/pve/lxc/${CTID}.conf)
+TAGS=$(awk -F': ' '/^tags:/ {print $2}' /etc/pve/lxc/"${CTID}".conf)
 TAGS="${TAGS:+$TAGS; }tailscale"
 pct set "$CTID" -tags "${TAGS}"
 msg "\e[1;32m ✔ Installed Tailscale\e[0m"

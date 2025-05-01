@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://www.home-assistant.io/
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -27,7 +27,7 @@ $STD pip install runlike
 msg_ok "Installed runlike"
 
 get_latest_release() {
-  curl -fsSL https://api.github.com/repos/$1/releases/latest | grep '"tag_name":' | cut -d'"' -f4
+  curl -fsSL https://api.github.com/repos/"$1"/releases/latest | grep '"tag_name":' | cut -d'"' -f4
 }
 
 DOCKER_LATEST_VERSION=$(get_latest_release "moby/moby")

@@ -3,7 +3,7 @@
 # Copyright (c) 2021-2025 tteck
 # Author: tteck
 # Co-Author: MountyMapleSyrup (MountyMapleSyrup)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://gitlab.com/LazyLibrarian/LazyLibrarian
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -35,7 +35,7 @@ msg_ok "Setup Python3"
 
 msg_info "Installing LazyLibrarian"
 $STD git clone https://gitlab.com/LazyLibrarian/LazyLibrarian /opt/LazyLibrarian
-cd /opt/LazyLibrarian
+cd /opt/LazyLibrarian || exit
 $STD pip install .
 msg_ok "Installed LazyLibrarian"
 

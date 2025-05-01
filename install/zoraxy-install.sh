@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://zoraxy.aroz.org/
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -20,7 +20,7 @@ mkdir -p /opt/zoraxy
 mv zoraxy_linux_amd64 /opt/zoraxy/zoraxy
 chmod +x /opt/zoraxy/zoraxy
 ln -s /opt/zoraxy/zoraxy /usr/local/bin/zoraxy
-echo "${RELEASE}" >/opt/${APPLICATION}_version.txt
+echo "${RELEASE}" >/opt/"${APPLICATION}"_version.txt
 msg_ok "Installed Zoraxy"
 
 msg_info "Creating Service"

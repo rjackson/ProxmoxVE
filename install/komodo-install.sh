@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 community-scripts ORG
 # Author: MickLesk
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://komo.do/
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -60,7 +60,7 @@ case $DB_CHOICE in
   ;;
 esac
 mkdir -p /opt/komodo
-cd /opt/komodo
+cd /opt/komodo || exit
 curl -fsSL "https://raw.githubusercontent.com/moghtech/komodo/main/compose/$DB_COMPOSE_FILE" -o $(basename "https://raw.githubusercontent.com/moghtech/komodo/main/compose/$DB_COMPOSE_FILE")
 
 msg_info "Setup Komodo Environment"

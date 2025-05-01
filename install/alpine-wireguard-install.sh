@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 community-scripts ORG
 # Author: MickLesk (CanbiZ)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://www.wireguard.com/
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -61,7 +61,7 @@ if [[ "$INSTALL_WGD" =~ ^[Yy]$ ]]; then
   msg_ok "Installed additional dependencies for WGDashboard"
   msg_info "Installing WGDashboard"
   git clone -q https://github.com/donaldzou/WGDashboard.git /etc/wgdashboard
-  cd /etc/wgdashboard/src
+  cd /etc/wgdashboard/src || exit
   chmod u+x wgd.sh
   $STD ./wgd.sh install
   msg_ok "Installed WGDashboard"

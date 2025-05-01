@@ -3,7 +3,7 @@
 # Copyright (c) 2021-2025 tteck
 # Author: tteck
 # Co-Author: MickLesk (Canbiz)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://github.com/alexta69/metube
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -50,10 +50,10 @@ msg_ok "Installed Node.js"
 
 msg_info "Installing MeTube"
 $STD git clone https://github.com/alexta69/metube /opt/metube
-cd /opt/metube/ui
+cd /opt/metube/ui || exit
 $STD npm install
 $STD node_modules/.bin/ng build
-cd /opt/metube
+cd /opt/metube || exit
 $STD pip3 install pipenv
 $STD pipenv install
 mkdir -p /opt/metube_downloads /opt/metube_downloads/.metube /opt/metube_downloads/music /opt/metube_downloads/videos

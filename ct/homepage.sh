@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-source <(curl -fsSL https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func)
+source <(curl -fsSL https://raw.githubusercontent.com/rjackson/ProxmoxVE/main/misc/build.func)
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://gethomepage.dev/
 
 APP="Homepage"
@@ -41,11 +41,11 @@ function update_script() {
     msg_info "Updating Homepage to v${RELEASE} (Patience)"
     systemctl stop homepage
     curl -fsSL "https://github.com/gethomepage/homepage/archive/refs/tags/v${RELEASE}.tar.gz" -o $(basename "https://github.com/gethomepage/homepage/archive/refs/tags/v${RELEASE}.tar.gz")
-    tar -xzf v${RELEASE}.tar.gz
-    rm -rf v${RELEASE}.tar.gz
-    cp -r homepage-${RELEASE}/* /opt/homepage/
-    rm -rf homepage-${RELEASE}
-    cd /opt/homepage
+    tar -xzf v"${RELEASE}".tar.gz
+    rm -rf v"${RELEASE}".tar.gz
+    cp -r homepage-"${RELEASE}"/* /opt/homepage/
+    rm -rf homepage-"${RELEASE}"
+    cd /opt/homepage || exit
     $STD pnpm install
     $STD npx --yes update-browserslist-db@latest
     export NEXT_PUBLIC_VERSION="v$RELEASE"

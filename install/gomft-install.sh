@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 community-scripts ORG
 # Author: Slaviša Arežina (tremor021)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://github.com/StarFleetCPTN/GoMFT
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -50,7 +50,7 @@ RELEASE=$(curl -fsSL https://api.github.com/repos/StarFleetCPTN/GoMFT/releases/l
 curl -fsSL "https://github.com/StarFleetCPTN/GoMFT/archive/refs/tags/v${RELEASE}.tar.gz" -o "$temp_file"
 tar -xzf "$temp_file"
 mv GoMFT-"${RELEASE}"/ /opt/gomft
-cd /opt/gomft
+cd /opt/gomft || exit
 $STD go install github.com/a-h/templ/cmd/templ@latest
 $STD "$HOME"/go/bin/templ generate
 $STD go build -o gomft main.go

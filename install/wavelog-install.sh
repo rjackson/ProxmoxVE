@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 community-scripts ORG
 # Author: Don Locke (DonLocke)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://github.com/wavelog/wavelog
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -44,12 +44,12 @@ msg_ok "Set up PHP"
 msg_info "Installing Wavelog"
 RELEASE=$(curl -fsSL https://api.github.com/repos/wavelog/wavelog/releases/latest | grep "tag_name" | awk '{print substr($2, 2, length($2)-3) }')
 curl -fsSL "https://github.com/wavelog/wavelog/archive/refs/tags/${RELEASE}.zip" -o $(basename "https://github.com/wavelog/wavelog/archive/refs/tags/${RELEASE}.zip")
-unzip -q ${RELEASE}.zip
-mv wavelog-${RELEASE}/ /opt/wavelog
+unzip -q "${RELEASE}".zip
+mv wavelog-"${RELEASE}"/ /opt/wavelog
 chown -R www-data:www-data /opt/wavelog/
 find /opt/wavelog/ -type d -exec chmod 755 {} \;
 find /opt/wavelog/ -type f -exec chmod 664 {} \;
-echo "${RELEASE}" >/opt/${APPLICATION}_version.txt
+echo "${RELEASE}" >/opt/"${APPLICATION}"_version.txt
 msg_ok "Installed Wavelog"
 
 msg_info "Creating Service"
@@ -77,7 +77,7 @@ motd_ssh
 customize
 
 msg_info "Cleaning up"
-rm -f ${RELEASE}.zip
+rm -f "${RELEASE}".zip
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean
 msg_ok "Cleaned"

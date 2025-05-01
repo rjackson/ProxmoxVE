@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://mafl.hywax.space/
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -37,12 +37,12 @@ msg_ok "Installed Node.js"
 RELEASE=$(curl -fsSL https://api.github.com/repos/hywax/mafl/releases/latest | grep "tag_name" | awk '{print substr($2, 3, length($2)-4) }')
 msg_info "Installing Mafl v${RELEASE}"
 curl -fsSL "https://github.com/hywax/mafl/archive/refs/tags/v${RELEASE}.tar.gz" -o $(basename "https://github.com/hywax/mafl/archive/refs/tags/v${RELEASE}.tar.gz")
-tar -xzf v${RELEASE}.tar.gz
+tar -xzf v"${RELEASE}".tar.gz
 mkdir -p /opt/mafl/data
 curl -fsSL "https://raw.githubusercontent.com/hywax/mafl/main/.example/config.yml" -o "/opt/mafl/data/config.yml"
-mv mafl-${RELEASE}/* /opt/mafl
-rm -rf mafl-${RELEASE}
-cd /opt/mafl
+mv mafl-"${RELEASE}"/* /opt/mafl
+rm -rf mafl-"${RELEASE}"
+cd /opt/mafl || exit
 export NUXT_TELEMETRY_DISABLED=true
 $STD yarn install
 $STD yarn build

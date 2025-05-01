@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://overseerr.dev/
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -37,7 +37,7 @@ msg_ok "Installed Yarn"
 
 msg_info "Installing Overseerr (Patience)"
 git clone -q https://github.com/sct/overseerr.git /opt/overseerr
-cd /opt/overseerr
+cd /opt/overseerr || exit
 $STD yarn install
 $STD yarn build
 msg_ok "Installed Overseerr"

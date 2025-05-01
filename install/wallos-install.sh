@@ -3,7 +3,7 @@
 # Copyright (c) 2021-2025 tteck
 # Author: tteck
 # Co-Author: MickLesk (Canbiz)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://github.com/ellite/wallos
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -22,12 +22,12 @@ $STD apt-get install -y \
 msg_ok "Installed Dependencies"
 
 msg_info "Installing Wallos (Patience)"
-cd /opt
+cd /opt || exit
 RELEASE=$(curl -fsSL https://api.github.com/repos/ellite/Wallos/releases/latest | grep "tag_name" | awk '{print substr($2, 3, length($2)-4) }')
 curl -fsSL "https://github.com/ellite/Wallos/archive/refs/tags/v${RELEASE}.zip" -o $(basename "https://github.com/ellite/Wallos/archive/refs/tags/v${RELEASE}.zip")
-unzip -q v${RELEASE}.zip
-mv Wallos-${RELEASE} /opt/wallos
-cd /opt/wallos
+unzip -q v"${RELEASE}".zip
+mv Wallos-"${RELEASE}" /opt/wallos
+cd /opt/wallos || exit
 mv /opt/wallos/db/wallos.empty.db /opt/wallos/db/wallos.db
 chown -R www-data:www-data /opt/wallos
 chmod -R 755 /opt/wallos
@@ -72,7 +72,7 @@ motd_ssh
 customize
 
 msg_info "Cleaning up"
-rm -rf /opt/v${RELEASE}.zip
+rm -rf /opt/v"${RELEASE}".zip
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean
 msg_ok "Cleaned"

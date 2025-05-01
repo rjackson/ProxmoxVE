@@ -2,7 +2,7 @@
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://github.com/community-scripts/rjackson/raw/main/LICENSE
 
 function header_info {
   clear
@@ -76,11 +76,11 @@ intel() {
   msg_ok "Downloaded the Intel Processor Microcode Package $microcode"
 
   msg_info "Installing $microcode (Patience)"
-  dpkg -i $microcode &>/dev/null
+  dpkg -i "$microcode" &>/dev/null
   msg_ok "Installed $microcode"
 
   msg_info "Cleaning up"
-  rm $microcode
+  rm "$microcode"
   msg_ok "Cleaned"
   echo -e "\nIn order to apply the changes, a system reboot will be necessary.\n"
 }
@@ -120,11 +120,11 @@ amd() {
   msg_ok "Downloaded the AMD Processor Microcode Package $microcode"
 
   msg_info "Installing $microcode (Patience)"
-  dpkg -i $microcode &>/dev/null
+  dpkg -i "$microcode" &>/dev/null
   msg_ok "Installed $microcode"
 
   msg_info "Cleaning up"
-  rm $microcode
+  rm "$microcode"
   msg_ok "Cleaned"
   echo -e "\nIn order to apply the changes, a system reboot will be necessary.\n"
 }

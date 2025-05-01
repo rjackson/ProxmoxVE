@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 community-scripts ORG
 # Author: MickLesk (CanbiZ)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://github.com/minio/minio
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -35,7 +35,7 @@ EOF
     echo "MinIO Admin User: $MINIO_ADMIN_USER"
     echo "MinIO Admin Password: $MINIO_ADMIN_PASSWORD"
 } >>~/minio.creds
-echo "${RELEASE}" >/opt/${APPLICATION}_version.txt
+echo "${RELEASE}" >/opt/"${APPLICATION}"_version.txt
 msg_ok "Setup MinIO"
 
 msg_info "Creating Service"

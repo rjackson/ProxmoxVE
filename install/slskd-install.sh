@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 community-scripts ORG
 # Author: vhsdream
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://github.com/slskd/slskd/, https://soularr.net
 
 source /dev/stdin <<< "$FUNCTIONS_FILE_PATH"
@@ -21,12 +21,12 @@ msg_ok "Installed Dependencies"
 msg_info "Setup ${APPLICATION}"
 tmp_file=$(mktemp)
 RELEASE=$(curl -s https://api.github.com/repos/slskd/slskd/releases/latest | grep "tag_name" | awk '{print substr($2, 2, length($2)-3) }')
-curl -fsSL "https://github.com/slskd/slskd/releases/download/${RELEASE}/slskd-${RELEASE}-linux-x64.zip" -o $tmp_file
-unzip -q $tmp_file -d /opt/${APPLICATION}
-echo "${RELEASE}" >/opt/${APPLICATION}_version.txt
+curl -fsSL "https://github.com/slskd/slskd/releases/download/${RELEASE}/slskd-${RELEASE}-linux-x64.zip" -o "$tmp_file"
+unzip -q "$tmp_file" -d /opt/"${APPLICATION}"
+echo "${RELEASE}" >/opt/"${APPLICATION}"_version.txt
 JWT_KEY=$(openssl rand -base64 44)
 SLSKD_API_KEY=$(openssl rand -base64 44)
-cp /opt/${APPLICATION}/config/slskd.example.yml /opt/${APPLICATION}/config/slskd.yml
+cp /opt/"${APPLICATION}"/config/slskd.example.yml /opt/"${APPLICATION}"/config/slskd.yml
 sed -i \
     -e "\|web:|,\|cidr|s|^#||" \
     -e "\|https:|,\|5031|s|false|true|" \
@@ -35,16 +35,16 @@ sed -i \
     s|0.0.0.0/0,::/0|& # Replace this with your subnet|" \
     -e "\|soulseek|,\|write_queue|s|^#||" \
     -e "\|jwt:|,\|ttl|s|key: ~|key: $JWT_KEY|" \
-    /opt/${APPLICATION}/config/slskd.yml
+    /opt/"${APPLICATION}"/config/slskd.yml
 msg_ok "Setup ${APPLICATION}"
 
 msg_info "Installing Soularr"
 rm -rf /usr/lib/python3.*/EXTERNALLY-MANAGED
-cd /tmp
+cd /tmp || exit
 curl -fsSL -o main.zip https://github.com/mrusse/soularr/archive/refs/heads/main.zip
 unzip -q main.zip
 mv soularr-main /opt/soularr
-cd /opt/soularr
+cd /opt/soularr || exit
 $STD pip install -r requirements.txt
 sed -i \
     -e "\|[Slskd]|,\|host_url|s|yourslskdapikeygoeshere|$SLSKD_API_KEY|" \
@@ -61,7 +61,7 @@ chmod +x /opt/soularr/run.sh
 msg_ok "Installed Soularr"
 
 msg_info "Creating Services"
-cat <<EOF >/etc/systemd/system/${APPLICATION}.service
+cat <<EOF >/etc/systemd/system/"${APPLICATION}".service
 [Unit]
 Description=${APPLICATION} Service
 After=network.target
@@ -105,7 +105,7 @@ ExecStart=/bin/bash -c /opt/soularr/run.sh
 [Install]
 WantedBy=multi-user.target
 EOF
-systemctl enable -q --now ${APPLICATION}
+systemctl enable -q --now "${APPLICATION}"
 systemctl enable -q soularr.timer
 msg_ok "Created Services"
 
@@ -113,7 +113,7 @@ motd_ssh
 customize
 
 msg_info "Cleaning up"
-rm -rf $tmp_file
+rm -rf "$tmp_file"
 rm -rf /tmp/main.zip
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean

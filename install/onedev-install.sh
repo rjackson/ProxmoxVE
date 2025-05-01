@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 community-scripts ORG
 # Author: kristocopani
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://onedev.io/
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -21,7 +21,7 @@ $STD apt-get install -y \
 msg_ok "Installed Dependencies"
 
 msg_info "Installing OneDev"
-cd /opt
+cd /opt || exit
 curl -fsSL "https://code.onedev.io/onedev/server/~site/onedev-latest.tar.gz" -o $(basename "https://code.onedev.io/onedev/server/~site/onedev-latest.tar.gz")
 tar -xzf onedev-latest.tar.gz
 mv /opt/onedev-latest /opt/onedev

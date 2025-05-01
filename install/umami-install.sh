@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://umami.is/
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -51,7 +51,7 @@ msg_ok "Set up postgresql"
 
 msg_info "Installing Umami (Patience)"
 git clone -q https://github.com/umami-software/umami.git /opt/umami
-cd /opt/umami
+cd /opt/umami || exit
 $STD yarn install
 echo -e "DATABASE_URL=postgresql://$DB_USER:$DB_PASS@localhost:5432/$DB_NAME" >>/opt/umami/.env
 $STD yarn run build

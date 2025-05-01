@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 community-scripts ORG
 # Author: Snarkenfaugister
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://github.com/pocket-id/pocket-id
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -44,21 +44,21 @@ msg_ok "Installed Golang"
 
 read -r -p "What public URL do you want to use (e.g. pocketid.mydomain.com)? " public_url
 msg_info "Setup Pocket ID"
-cd /opt
+cd /opt || exit
 RELEASE=$(curl -fsSL https://api.github.com/repos/pocket-id/pocket-id/releases/latest | grep "tag_name" | awk '{print substr($2, 3, length($2)-4) }')
 curl -fsSL "https://github.com/pocket-id/pocket-id/archive/refs/tags/v${RELEASE}.zip" -o $(basename "https://github.com/pocket-id/pocket-id/archive/refs/tags/v${RELEASE}.zip")
-unzip -q v${RELEASE}.zip
-mv pocket-id-${RELEASE}/ /opt/pocket-id
+unzip -q v"${RELEASE}".zip
+mv pocket-id-"${RELEASE}"/ /opt/pocket-id
 
-cd /opt/pocket-id/backend
+cd /opt/pocket-id/backend || exit
 cp .env.example .env
 sed -i "s/PUBLIC_APP_URL=http:\/\/localhost/PUBLIC_APP_URL=https:\/\/${public_url}/" .env
-cd cmd
+cd cmd || exit
 CGO_ENABLED=1
 GOOS=linux
 $STD go build -o ../pocket-id-backend
 
-cd ../../frontend
+cd ../../frontend || exit
 cp .env.example .env
 sed -i "s/PUBLIC_APP_URL=http:\/\/localhost/PUBLIC_APP_URL=https:\/\/${public_url}/" .env
 $STD npm install
@@ -66,7 +66,7 @@ $STD npm run build
 
 cd ..
 cp reverse-proxy/Caddyfile /etc/caddy/Caddyfile
-echo "${RELEASE}" >/opt/${APPLICATION}_version.txt
+echo "${RELEASE}" >/opt/"${APPLICATION}"_version.txt
 msg_ok "Setup Pocket ID"
 
 msg_info "Creating Service"
@@ -119,7 +119,7 @@ motd_ssh
 customize
 
 msg_info "Cleaning up"
-rm -f /opt/v${RELEASE}.zip
+rm -f /opt/v"${RELEASE}".zip
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean
 msg_ok "Cleaned"

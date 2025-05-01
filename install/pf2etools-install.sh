@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 community-scripts ORG
 # Author: TheRealVira
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://pf2etools.com/
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -33,12 +33,12 @@ $STD apt-get install -y nodejs
 msg_ok "Installed Node.js"
 
 msg_info "Setup Pf2eTools"
-cd /opt
+cd /opt || exit
 RELEASE=$(curl -fsSL https://api.github.com/repos/Pf2eToolsOrg/Pf2eTools/releases/latest | grep "tag_name" | awk '{print substr($2, 2, length($2)-3) }')
 curl -fsSL "https://github.com/Pf2eToolsOrg/Pf2eTools/archive/refs/tags/${RELEASE}.zip" -o $(basename "https://github.com/Pf2eToolsOrg/Pf2eTools/archive/refs/tags/${RELEASE}.zip")
 unzip -q "${RELEASE}.zip"
 mv "Pf2eTools-${RELEASE:1}" /opt/Pf2eTools
-cd /opt/Pf2eTools
+cd /opt/Pf2eTools || exit
 $STD npm install
 $STD npm run build
 echo "${RELEASE}" >/opt/Pf2eTools_version.txt
@@ -59,7 +59,7 @@ chmod -R 755 "/opt/Pf2eTools"
 msg_ok "Created Service"
 
 msg_info "Cleaning up"
-rm -rf /opt/${RELEASE}.zip
+rm -rf /opt/"${RELEASE}".zip
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean
 msg_ok "Cleaned"

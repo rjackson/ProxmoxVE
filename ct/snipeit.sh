@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-source <(curl -fsSL https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func)
+source <(curl -fsSL https://raw.githubusercontent.com/rjackson/ProxmoxVE/main/misc/build.func)
 # Copyright (c) 2021-2025 community-scripts ORG
 # Author: Michel Roegl-Brunner (michelroegl-brunner)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://snipeitapp.com/
 
 APP="SnipeIT"
@@ -44,7 +44,7 @@ function update_script() {
     cp /opt/snipe-it-backup/.env /opt/snipe-it/.env
     cp -r /opt/snipe-it-backup/public/uploads/ /opt/snipe-it/public/uploads/
     cp -r /opt/snipe-it-backup/storage/private_uploads /opt/snipe-it/storage/private_uploads
-    cd /opt/snipe-it/
+    cd /opt/snipe-it/ || exit
     export COMPOSER_ALLOW_SUPERUSER=1
     $STD composer install --no-dev --optimize-autoloader --no-interaction
     $STD composer dump-autoload

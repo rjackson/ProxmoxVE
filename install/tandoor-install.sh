@@ -3,7 +3,7 @@
 # Copyright (c) 2021-2025 tteck
 # Author: tteck
 # Co-Author: MickLesk (Canbiz)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://tandoor.dev/
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -59,7 +59,7 @@ msg_info "Installing Tandoor (Patience)"
 $STD git clone https://github.com/TandoorRecipes/recipes -b master /opt/tandoor
 mkdir -p /opt/tandoor/{config,api,mediafiles,staticfiles}
 $STD pip3 install -r /opt/tandoor/requirements.txt
-cd /opt/tandoor/vue
+cd /opt/tandoor/vue || exit
 $STD yarn install
 $STD yarn build
 curl -fsSL "https://raw.githubusercontent.com/TandoorRecipes/recipes/develop/.env.template" -o "/opt/tandoor/.env"

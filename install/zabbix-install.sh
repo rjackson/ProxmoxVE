@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 community-scripts ORG
 # Author: MickLesk (CanbiZ)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://www.zabbix.com/
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -14,7 +14,7 @@ network_check
 update_os
 
 msg_info "Installing Zabbix"
-cd /tmp
+cd /tmp || exit
 curl -fsSL "$(curl -fsSL https://repo.zabbix.com/zabbix/ |
   grep -oP '(?<=href=")[0-9]+\.[0-9]+(?=/")' | sort -V | tail -n1 |
   xargs -I{} echo "https://repo.zabbix.com/zabbix/{}/release/debian/pool/main/z/zabbix-release/zabbix-release_latest+debian12_all.deb")" \

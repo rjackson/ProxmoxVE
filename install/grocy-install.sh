@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://grocy.info/
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -33,7 +33,7 @@ msg_ok "Installed PHP8.2"
 msg_info "Installing grocy"
 latest=$(curl -fsSL https://api.github.com/repos/grocy/grocy/releases/latest | grep "tag_name" | awk '{print substr($2, 3, length($2)-4) }')
 curl -fsSL "https://github.com/grocy/grocy/releases/download/v${latest}/grocy_${latest}.zip" -o $(basename "https://github.com/grocy/grocy/releases/download/v${latest}/grocy_${latest}.zip")
-$STD unzip grocy_${latest}.zip -d /var/www/html
+$STD unzip grocy_"${latest}".zip -d /var/www/html
 chown -R www-data:www-data /var/www/html
 cp /var/www/html/config-dist.php /var/www/html/data/config.php
 chmod +x /var/www/html/update.sh
@@ -64,5 +64,5 @@ customize
 msg_info "Cleaning up"
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean
-rm -rf /root/grocy_${latest}.zip
+rm -rf /root/grocy_"${latest}".zip
 msg_ok "Cleaned"

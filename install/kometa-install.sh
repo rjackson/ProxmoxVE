@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 community-scripts ORG
 # Author: Slaviša Arežina (tremor021)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://github.com/Kometa-Team/Kometa
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -21,10 +21,10 @@ msg_ok "Setup Python 3"
 msg_info "Setup Kometa"
 temp_file=$(mktemp)
 RELEASE=$(curl -fsSL https://api.github.com/repos/Kometa-Team/Kometa/releases/latest | grep "tag_name" | awk '{print substr($2, 3, length($2)-4) }')
-curl -fsSL "https://github.com/Kometa-Team/Kometa/archive/refs/tags/v${RELEASE}.tar.gz" -o ""$temp_file""
+curl -fsSL "https://github.com/Kometa-Team/Kometa/archive/refs/tags/v${RELEASE}.tar.gz" -o """$temp_file"""
 tar -xzf "$temp_file"
-mv Kometa-${RELEASE} /opt/kometa
-cd /opt/kometa
+mv Kometa-"${RELEASE}" /opt/kometa
+cd /opt/kometa || exit
 $STD pip install -r requirements.txt --ignore-installed
 mkdir -p config/assets
 cp config/config.yml.template config/config.yml
@@ -61,7 +61,7 @@ motd_ssh
 customize
 
 msg_info "Cleaning up"
-rm -f $temp_file
+rm -f "$temp_file"
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean
 msg_ok "Cleaned"

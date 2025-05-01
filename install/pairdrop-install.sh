@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://pairdrop.net/
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -32,7 +32,7 @@ msg_ok "Installed Node.js"
 
 msg_info "Installing PairDrop"
 git clone -q https://github.com/schlagmichdoch/PairDrop.git /opt/pairdrop
-cd /opt/pairdrop
+cd /opt/pairdrop || exit
 $STD npm install
 msg_ok "Installed PairDrop"
 

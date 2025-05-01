@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 tteck
 # Author: MickLesk (Canbiz)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://github.com/gnmyt/myspeed
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -33,12 +33,12 @@ msg_ok "Installed Node.js"
 
 msg_info "Installing MySpeed"
 RELEASE=$(curl -fsSL https://github.com/gnmyt/myspeed/releases/latest | grep "title>Release" | cut -d " " -f 5)
-cd /opt
+cd /opt || exit
 curl -fsSL "https://github.com/gnmyt/myspeed/releases/download/v$RELEASE/MySpeed-$RELEASE.zip" -o $(basename "https://github.com/gnmyt/myspeed/releases/download/v$RELEASE/MySpeed-$RELEASE.zip")
-unzip -q MySpeed-$RELEASE.zip -d myspeed
-cd myspeed
+unzip -q MySpeed-"$RELEASE".zip -d myspeed
+cd myspeed || exit
 $STD npm install
-echo "${RELEASE}" >/opt/${APPLICATION}_version.txt
+echo "${RELEASE}" >/opt/"${APPLICATION}"_version.txt
 msg_ok "Installed MySpeed"
 
 msg_info "Creating Service"
@@ -66,6 +66,6 @@ customize
 
 msg_info "Cleaning up"
 $STD apt-get -y autoremove
-rm -rf /opt/MySpeed-$RELEASE.zip
+rm -rf /opt/MySpeed-"$RELEASE".zip
 $STD apt-get -y autoclean
 msg_ok "Cleaned"

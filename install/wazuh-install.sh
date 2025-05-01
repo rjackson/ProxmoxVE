@@ -2,7 +2,7 @@
 
 # Copyright (c) 2024 community-scripts ORG
 # Author: Omar Minaya
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://wazuh.com/
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -18,7 +18,7 @@ RELEASE=$(curl -fsSL https://api.github.com/repos/wazuh/wazuh/releases/latest | 
 msg_ok "Latest Wazuh Version: $RELEASE"
 
 msg_info "Setup Wazuh"
-curl -fsSL https://packages.wazuh.com/$RELEASE/wazuh-install.sh -o wazuh-install.sh
+curl -fsSL https://packages.wazuh.com/"$RELEASE"/wazuh-install.sh -o wazuh-install.sh
 chmod +x wazuh-install.sh
 if [ "$STD" = "silent" ]; then
   bash wazuh-install.sh -a >>~/wazuh-install.output

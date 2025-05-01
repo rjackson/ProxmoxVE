@@ -3,7 +3,7 @@
 # Copyright (c) 2021-2025 tteck
 # Author: tteck
 # Co-Author: MickLesk (Canbiz)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://github.com/Donkie/Spoolman
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -33,14 +33,14 @@ msg_ok "Setup Python3"
 
 msg_info "Installing Spoolman"
 RELEASE=$(curl -fsSL https://github.com/Donkie/Spoolman/releases/latest | grep "title>Release" | cut -d " " -f 4)
-cd /opt
+cd /opt || exit
 curl -fsSL "https://github.com/Donkie/Spoolman/releases/download/$RELEASE/spoolman.zip" -o $(basename "https://github.com/Donkie/Spoolman/releases/download/$RELEASE/spoolman.zip")
 unzip -q spoolman.zip -d spoolman
 rm -rf spoolman.zip
-cd spoolman
+cd spoolman || exit
 $STD pip3 install -r requirements.txt
 curl -fsSL "https://raw.githubusercontent.com/Donkie/Spoolman/master/.env.example" -o ".env"
-echo "${RELEASE}" >/opt/${APPLICATION}_version.txt
+echo "${RELEASE}" >/opt/"${APPLICATION}"_version.txt
 msg_ok "Installed Spoolman"
 
 msg_info "Creating Service"

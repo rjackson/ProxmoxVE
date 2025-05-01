@@ -3,7 +3,7 @@
 # Copyright (c) 2021-2025 tteck
 # Author: tteck
 # Co-Author: havardthom
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://openwebui.com/
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -40,10 +40,10 @@ msg_ok "Installed Node.js"
 
 msg_info "Installing Open WebUI (Patience)"
 $STD git clone https://github.com/open-webui/open-webui.git /opt/open-webui
-cd /opt/open-webui/backend
+cd /opt/open-webui/backend || exit
 $STD pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
 $STD pip3 install -r requirements.txt -U
-cd /opt/open-webui
+cd /opt/open-webui || exit
 cp .env.example .env
 cat <<EOF >/opt/open-webui/.env
 ENV=prod

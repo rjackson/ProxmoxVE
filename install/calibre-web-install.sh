@@ -3,7 +3,7 @@
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
 # Co-Author: remz1337
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://github.com/janeczku/calibre-web
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -25,7 +25,7 @@ msg_ok "Installed Python Dependencies"
 
 msg_info "Installing Kepubify"
 mkdir -p /opt/kepubify
-cd /opt/kepubify
+cd /opt/kepubify || exit
 curl -fsSLO https://github.com/pgaskin/kepubify/releases/latest/download/kepubify-linux-64bit &>/dev/null
 chmod +x kepubify-linux-64bit
 msg_ok "Installed Kepubify"

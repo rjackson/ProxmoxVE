@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-source <(curl -fsSL https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func)
+source <(curl -fsSL https://raw.githubusercontent.com/rjackson/ProxmoxVE/main/misc/build.func)
 # Copyright (c) 2021-2025 community-scripts ORG
 # Author: Slaviša Arežina (tremor021)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://github.com/HabitRPG/habitica
 
 APP="Habitica"
@@ -39,9 +39,9 @@ function update_script() {
         msg_info "Updating $APP to ${RELEASE}"
         temp_file=$(mktemp)
 curl -fsSL "https://github.com/HabitRPG/habitica/archive/refs/tags/v${RELEASE}.tar.gz" -o "$temp_file"
-        tar zxf $temp_file
-        cp -rf habitica-${RELEASE}/* /opt/habitica
-        cd /opt/habitica
+        tar zxf "$temp_file"
+        cp -rf habitica-"${RELEASE}"/* /opt/habitica
+        cd /opt/habitica || exit
         $STD npm i
         echo "${RELEASE}" >/opt/${APP}_version.txt
         msg_ok "Updated $APP to ${RELEASE}"
@@ -53,8 +53,8 @@ curl -fsSL "https://github.com/HabitRPG/habitica/archive/refs/tags/v${RELEASE}.t
         msg_ok "Started $APP"
 
         msg_info "Cleaning Up"
-        rm -f $temp_file
-        rm -rf ~/habitica-${RELEASE}
+        rm -f "$temp_file"
+        rm -rf ~/habitica-"${RELEASE}"
         msg_ok "Cleanup Completed"
 
         msg_ok "Update Successful"

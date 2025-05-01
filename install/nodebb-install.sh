@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2024 tteck
 # Author: MickLesk (Canbiz)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://github.com/NodeBB/NodeBB
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -84,12 +84,12 @@ systemctl restart mongod
 msg_ok "MongoDB successfully configurated"
 
 msg_info "Install NodeBB"
-cd /opt
+cd /opt || exit
 RELEASE=$(curl -fsSL https://api.github.com/repos/NodeBB/NodeBB/releases/latest | grep "tag_name" | awk '{print substr($2, 3, length($2)-4) }')
 curl -fsSL "https://github.com/NodeBB/NodeBB/archive/refs/tags/v${RELEASE}.zip" -o $(basename "https://github.com/NodeBB/NodeBB/archive/refs/tags/v${RELEASE}.zip")
-unzip -q v${RELEASE}.zip
-mv NodeBB-${RELEASE} /opt/nodebb
-cd /opt/nodebb
+unzip -q v"${RELEASE}".zip
+mv NodeBB-"${RELEASE}" /opt/nodebb
+cd /opt/nodebb || exit
 touch pidfile
 expect <<EOF >/dev/null 2>&1
 log_file /dev/null
@@ -154,7 +154,7 @@ motd_ssh
 customize
 
 msg_info "Cleaning up"
-rm -R /opt/v${RELEASE}.zip
+rm -R /opt/v"${RELEASE}".zip
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean
 msg_ok "Cleaned"

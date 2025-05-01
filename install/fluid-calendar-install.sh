@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 community-scripts ORG
 # Author: vhsdream
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://github.com/dotnetfactory/fluid-calendar
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -42,16 +42,16 @@ $STD sudo -u postgres psql -c "ALTER USER $DB_USER WITH SUPERUSER;"
   echo "Database Password: $DB_PASS"
   echo "Database Name: $DB_NAME"
   echo "NextAuth Secret: $NEXTAUTH_SECRET"
-} >>~/$APPLICATION.creds
+} >>~/"$APPLICATION".creds
 msg_ok "Set up Postgresql Database"
 
 msg_info "Setup ${APPLICATION}"
 tmp_file=$(mktemp)
 RELEASE=$(curl -fsSL https://api.github.com/repos/dotnetfactory/fluid-calendar/releases/latest | grep "tag_name" | awk '{print substr($2, 3, length($2)-4) }')
 curl -fsSL "https://github.com/dotnetfactory/fluid-calendar/archive/refs/tags/v${RELEASE}.zip" -o "$tmp_file"
-unzip -q $tmp_file
-mv ${APPLICATION}-${RELEASE}/ /opt/${APPLICATION}
-echo "${RELEASE}" >/opt/${APPLICATION}_version.txt
+unzip -q "$tmp_file"
+mv "${APPLICATION}"-"${RELEASE}"/ /opt/"${APPLICATION}"
+echo "${RELEASE}" >/opt/"${APPLICATION}"_version.txt
 
 cat <<EOF >/opt/fluid-calendar/.env
 DATABASE_URL="postgresql://${DB_USER}:${DB_PASS}@localhost:5432/${DB_NAME}"
@@ -68,7 +68,7 @@ RESEND_API_KEY=
 RESEND_EMAIL=
 EOF
 export NEXT_TELEMETRY_DISABLED=1
-cd /opt/fluid-calendar
+cd /opt/fluid-calendar || exit
 $STD npm install --legacy-peer-deps
 $STD npm run prisma:generate
 $STD npx prisma migrate deploy
@@ -96,7 +96,7 @@ motd_ssh
 customize
 
 msg_info "Cleaning up"
-rm -f $tmp_file
+rm -f "$tmp_file"
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean
 msg_ok "Cleaned"

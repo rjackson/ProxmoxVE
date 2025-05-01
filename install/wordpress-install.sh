@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 communtiy-scripts ORG
 # Author: MickLesk (Canbiz)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://wordpress.org/
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -37,11 +37,11 @@ $STD mysql -u root -e "GRANT ALL PRIVILEGES ON $DB_NAME.* TO '$DB_USER'@'localho
 msg_ok "Set up Database"
 
 msg_info "Installing Wordpress (Patience)"
-cd /var/www/html
+cd /var/www/html || exit
 curl -fsSL "https://wordpress.org/latest.zip" -o $(basename "https://wordpress.org/latest.zip")
 unzip -q latest.zip
 chown -R www-data:www-data wordpress/
-cd /var/www/html/wordpress
+cd /var/www/html/wordpress || exit
 find . -type d -exec chmod 755 {} \;
 find . -type f -exec chmod 644 {} \;
 mv wp-config-sample.php wp-config.php

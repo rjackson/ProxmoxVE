@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 tteck
 # Author: tteck
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://archivebox.io/
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -55,7 +55,7 @@ $STD adduser --system --shell /bin/bash --gecos 'Archive Box User' --group --dis
 chown -R archivebox:archivebox /opt/archivebox/{data,.npm,.cache,.local}
 chmod -R 755 /opt/archivebox/data
 $STD pip install archivebox
-cd /opt/archivebox/data
+cd /opt/archivebox/data || exit
 expect <<EOF
 set timeout -1
 log_user 0

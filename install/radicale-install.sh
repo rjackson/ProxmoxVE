@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 community-scripts ORG
 # Author: Slaviša Arežina (tremor021)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://radicale.org/
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -25,7 +25,7 @@ python3 -m venv /opt/radicale
 source /opt/radicale/bin/activate
 $STD python3 -m pip install --upgrade https://github.com/Kozea/Radicale/archive/master.tar.gz
 RNDPASS=$(openssl rand -base64 18 | tr -dc 'a-zA-Z0-9' | head -c13)
-$STD htpasswd -c -b -5 /opt/radicale/users admin $RNDPASS
+$STD htpasswd -c -b -5 /opt/radicale/users admin "$RNDPASS"
 {
   echo "Radicale Credentials"
   echo "Admin User: admin"

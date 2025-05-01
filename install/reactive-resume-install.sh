@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 community-scripts ORG
 # Author: vhsdream
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://rxresu.me
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -26,7 +26,7 @@ curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dea
 echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_22.x nodistro main" >/etc/apt/sources.list.d/nodesource.list
 echo "YES" | /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh &>/dev/null
 $STD apt-get install -y postgresql-16 nodejs
-cd /tmp
+cd /tmp || exit
 curl -fsSL https://dl.min.io/server/minio/release/linux-amd64/minio.deb -o minio.deb
 $STD dpkg -i minio.deb
 
@@ -48,10 +48,10 @@ CHROME_TOKEN=$(openssl rand -hex 32)
 LOCAL_IP=$(hostname -I | awk '{print $1}')
 TAG=$(curl -fsSL https://api.github.com/repos/browserless/browserless/tags?per_page=1 | grep "name" | awk '{print substr($2, 3, length($2)-4) }')
 RELEASE=$(curl -fsSL https://api.github.com/repos/AmruthPillai/Reactive-Resume/releases/latest | grep "tag_name" | awk '{print substr($2, 3, length($2)-4) }')
-curl -fsSL "https://github.com/AmruthPillai/Reactive-Resume/archive/refs/tags/v${RELEASE}.zip" -o v${RELEASE}.zip
-unzip -q v${RELEASE}.zip
-mv ${APPLICATION}-${RELEASE}/ /opt/${APPLICATION}
-cd /opt/${APPLICATION}
+curl -fsSL "https://github.com/AmruthPillai/Reactive-Resume/archive/refs/tags/v${RELEASE}.zip" -o v"${RELEASE}".zip
+unzip -q v"${RELEASE}".zip
+mv "${APPLICATION}"-"${RELEASE}"/ /opt/"${APPLICATION}"
+cd /opt/${APPLICATION} || exit
 corepack enable
 export CI="true"
 export PUPPETEER_SKIP_DOWNLOAD="true"
@@ -64,11 +64,11 @@ $STD pnpm run prisma:generate
 msg_ok "Installed ${APPLICATION}"
 
 msg_info "Installing Browserless (Patience)"
-cd /tmp
-curl -fsSL https://github.com/browserless/browserless/archive/refs/tags/v${TAG}.zip -o v${TAG}.zip
-unzip -q v${TAG}.zip
-mv browserless-${TAG} /opt/browserless
-cd /opt/browserless
+cd /tmp || exit
+curl -fsSL https://github.com/browserless/browserless/archive/refs/tags/v"${TAG}".zip -o v"${TAG}".zip
+unzip -q v"${TAG}".zip
+mv browserless-"${TAG}" /opt/browserless
+cd /opt/browserless || exit
 $STD npm install
 rm -rf src/routes/{chrome,edge,firefox,webkit}
 $STD node_modules/playwright-core/cli.js install --with-deps chromium
@@ -85,7 +85,7 @@ MINIO_ROOT_PASSWORD="${MINIO_PASS}"
 MINIO_VOLUMES=/opt/minio
 MINIO_OPTS="--address :9000 --console-address 127.0.0.1:9001"
 EOF
-cat <<EOF >/opt/${APPLICATION}/.env
+cat <<EOF >/opt/"${APPLICATION}"/.env
 NODE_ENV=production
 PORT=3000
 PUBLIC_URL=http://${LOCAL_IP}:3000
@@ -124,14 +124,14 @@ HOST=localhost
 PORT=8080
 TOKEN=${CHROME_TOKEN}
 EOF
-echo "${RELEASE}" >/opt/${APPLICATION}_version.txt
+echo "${RELEASE}" >/opt/"${APPLICATION}"_version.txt
 {
     echo "${APPLICATION} Credentials"
     echo "Database User: $DB_USER"
     echo "Database Password: $DB_PASS"
     echo "Database Name: $DB_NAME"
     echo "Minio Root Password: ${MINIO_PASS}"
-} >>~/${APPLICATION}.creds
+} >>~/"${APPLICATION}".creds
 msg_ok "Configured applications"
 
 msg_info "Creating Services"
@@ -144,7 +144,7 @@ WorkingDirectory=/usr/local/bin
 EnvironmentFile=/opt/minio/.env
 EOF
 
-cat <<EOF >/etc/systemd/system/${APPLICATION}.service
+cat <<EOF >/etc/systemd/system/"${APPLICATION}".service
 [Unit]
 Description=${APPLICATION} Service
 After=network.target postgresql.service minio.service
@@ -175,15 +175,15 @@ Restart=unless-stopped
 WantedBy=multi-user.target
 EOF
 systemctl daemon-reload
-systemctl enable -q --now minio.service ${APPLICATION}.service browserless.service
+systemctl enable -q --now minio.service "${APPLICATION}".service browserless.service
 msg_ok "Created Services"
 
 motd_ssh
 customize
 
 msg_info "Cleaning up"
-rm -f /tmp/v${RELEASE}.zip
-rm -f /tmp/v${TAG}.zip
+rm -f /tmp/v"${RELEASE}".zip
+rm -f /tmp/v"${TAG}".zip
 rm -f /tmp/minio.deb
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean

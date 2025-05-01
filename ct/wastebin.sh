@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-source <(curl -fsSL https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func)
+source <(curl -fsSL https://raw.githubusercontent.com/rjackson/ProxmoxVE/main/misc/build.func)
 # Copyright (c) 2021-2025 tteck
 # Author: MickLesk (Canbiz)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://github.com/matze/wastebin
 
 APP="Wastebin"
@@ -65,7 +65,7 @@ EOF
         msg_info "Updating Wastebin"
         temp_file=$(mktemp)
 curl -fsSL "https://github.com/matze/wastebin/releases/download/${RELEASE}/wastebin_${RELEASE}_x86_64-unknown-linux-musl.zip" -o "$temp_file"
-        unzip -o -q $temp_file
+        unzip -o -q "$temp_file"
         cp -f wastebin /opt/wastebin/
         chmod +x /opt/wastebin/wastebin
         echo "${RELEASE}" >/opt/${APP}_version.txt
@@ -76,7 +76,7 @@ curl -fsSL "https://github.com/matze/wastebin/releases/download/${RELEASE}/waste
         msg_ok "Started Wastebin"
 
         msg_info "Cleaning Up"
-        rm -f $temp_file
+        rm -f "$temp_file"
         msg_ok "Cleanup Completed"
         msg_ok "Updated Successfully"
     else

@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 community-scripts ORG
 # Author: MickLesk
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://www.kimai.org/
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -60,7 +60,7 @@ RELEASE=$(curl -fsSL https://api.github.com/repos/kimai/kimai/releases/latest | 
 curl -fsSL "https://github.com/kimai/kimai/archive/refs/tags/${RELEASE}.zip" -o $(basename "https://github.com/kimai/kimai/archive/refs/tags/${RELEASE}.zip")
 unzip -q "${RELEASE}".zip
 mv kimai-"${RELEASE}" /opt/kimai
-cd /opt/kimai
+cd /opt/kimai || exit
 echo "export COMPOSER_ALLOW_SUPERUSER=1" >>~/.bashrc
 source ~/.bashrc
 $STD composer install --no-dev --optimize-autoloader --no-interaction

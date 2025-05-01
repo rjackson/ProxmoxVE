@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 community-scripts ORG
 # Author: MickLesk (CanbiZ)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://github.com/clusterzx/paperless-ai
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -31,12 +31,12 @@ $STD apt-get install -y nodejs
 msg_ok "Installed Node.js"
 
 msg_info "Setup Paperless-AI"
-cd /opt
+cd /opt || exit
 RELEASE=$(curl -fsSL https://api.github.com/repos/clusterzx/paperless-ai/releases/latest | grep "tag_name" | awk '{print substr($2, 3, length($2)-4) }')
 curl -fsSL "https://github.com/clusterzx/paperless-ai/archive/refs/tags/v${RELEASE}.zip" -o $(basename "https://github.com/clusterzx/paperless-ai/archive/refs/tags/v${RELEASE}.zip")
-unzip -q v${RELEASE}.zip
-mv paperless-ai-${RELEASE} /opt/paperless-ai
-cd /opt/paperless-ai
+unzip -q v"${RELEASE}".zip
+mv paperless-ai-"${RELEASE}" /opt/paperless-ai
+cd /opt/paperless-ai || exit
 $STD npm install
 mkdir -p /opt/paperless-ai/data
 cat <<EOF >/opt/paperless-ai/data/.env
@@ -86,7 +86,7 @@ motd_ssh
 customize
 
 msg_info "Cleaning up"
-rm -rf /opt/v${RELEASE}.zip
+rm -rf /opt/v"${RELEASE}".zip
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean
 msg_ok "Cleaned"

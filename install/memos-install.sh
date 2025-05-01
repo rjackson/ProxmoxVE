@@ -3,7 +3,7 @@
 # Copyright (c) 2021-2025 tteck
 # Author: tteck
 # Co-Author: MickLesk (Canbiz)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://github.com/usememos/memos
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -51,10 +51,10 @@ msg_info "Installing Memos (Patience)"
 mkdir -p /opt/memos_data
 export NODE_OPTIONS="--max-old-space-size=2048"
 $STD git clone https://github.com/usememos/memos.git /opt/memos
-cd /opt/memos/web
+cd /opt/memos/web || exit
 $STD pnpm i --frozen-lockfile
 $STD pnpm build
-cd /opt/memos
+cd /opt/memos || exit
 mkdir -p /opt/memos/server/dist
 cp -r web/dist/* /opt/memos/server/dist/
 cp -r web/dist/* /opt/memos/server/router/frontend/dist/

@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 community-scripts ORG
 # Author: tteck (tteckster) | Co-Author: Slaviša Arežina (tremor021)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://github.com/keycloak/keycloak
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -28,8 +28,8 @@ msg_info "Installing Keycloak"
 temp_file=$(mktemp)
 RELEASE=$(curl -fsSL https://api.github.com/repos/keycloak/keycloak/releases/latest | grep "tag_name" | awk '{print substr($2, 2, length($2)-3) }')
 curl -fsSL "https://github.com/keycloak/keycloak/releases/download/$RELEASE/keycloak-$RELEASE.tar.gz" -o "$temp_file"
-tar xzf $temp_file
-mv keycloak-$RELEASE /opt/keycloak
+tar xzf "$temp_file"
+mv keycloak-"$RELEASE" /opt/keycloak
 msg_ok "Installed Keycloak"
 
 msg_info "Creating Service"
@@ -53,7 +53,7 @@ motd_ssh
 customize
 
 msg_info "Cleaning up"
-rm -f $temp_file
+rm -f "$temp_file"
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean
 msg_ok "Cleaned"

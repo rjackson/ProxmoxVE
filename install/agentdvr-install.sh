@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://www.ispyconnect.com/
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -25,7 +25,7 @@ msg_ok "Installed Dependencies"
 msg_info "Installing AgentDVR"
 mkdir -p /opt/agentdvr/agent
 RELEASE=$(curl -fsSL "https://www.ispyconnect.com/api/Agent/DownloadLocation4?platform=Linux64&fromVersion=0" | grep -o 'https://.*\.zip')
-cd /opt/agentdvr/agent
+cd /opt/agentdvr/agent || exit
 curl -fsSL "$RELEASE" -o $(basename "$RELEASE")
 $STD unzip Agent_Linux64*.zip
 rm -rf Agent_Linux64*.zip

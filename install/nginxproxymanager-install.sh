@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://nginxproxymanager.com/
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -66,12 +66,12 @@ read -r -p "Would you like to install an older version (v2.10.4)? <y/N> " prompt
 if [[ ${prompt,,} =~ ^(y|yes)$ ]]; then
   msg_info "Downloading Nginx Proxy Manager v2.10.4"
   curl -fsSL "https://codeload.github.com/NginxProxyManager/nginx-proxy-manager/tar.gz/v2.10.4" | tar -xz
-  cd ./nginx-proxy-manager-2.10.4
+  cd ./nginx-proxy-manager-2.10.4 || exit
   msg_ok "Downloaded Nginx Proxy Manager v2.10.4"
 else
   msg_info "Downloading Nginx Proxy Manager v${RELEASE}"
   curl -fsSL "https://codeload.github.com/NginxProxyManager/nginx-proxy-manager/tar.gz/v${RELEASE}" | tar -xz
-  cd ./nginx-proxy-manager-${RELEASE}
+  cd ./nginx-proxy-manager-${RELEASE} || exit
   msg_ok "Downloaded Nginx Proxy Manager v${RELEASE}"
 fi
 msg_info "Setting up Environment"
@@ -134,7 +134,7 @@ cp -r global/* /app/global
 msg_ok "Set up Environment"
 
 msg_info "Building Frontend"
-cd ./frontend
+cd ./frontend || exit
 $STD pnpm install
 $STD pnpm upgrade
 $STD pnpm run build
@@ -159,7 +159,7 @@ if [ ! -f /app/config/production.json ]; then
 }
 EOF
 fi
-cd /app
+cd /app || exit
 $STD pnpm install
 msg_ok "Initialized Backend"
 

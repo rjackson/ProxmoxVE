@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 community-scripts ORG
 # Author: MickLesk (Canbiz)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://github.com/BookStackApp/BookStack
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -41,12 +41,12 @@ msg_ok "Set up database"
 
 msg_info "Setup Bookstack (Patience)"
 LOCAL_IP="$(hostname -I | awk '{print $1}')"
-cd /opt
+cd /opt || exit
 RELEASE=$(curl -fsSL https://api.github.com/repos/BookStackApp/BookStack/releases/latest | grep "tag_name" | awk '{print substr($2, 3, length($2)-4) }')
 curl -fsSL "https://github.com/BookStackApp/BookStack/archive/refs/tags/v${RELEASE}.zip" -o $(basename "https://github.com/BookStackApp/BookStack/archive/refs/tags/v${RELEASE}.zip")
-unzip -q v${RELEASE}.zip
-mv BookStack-${RELEASE} /opt/bookstack
-cd /opt/bookstack
+unzip -q v"${RELEASE}".zip
+mv BookStack-"${RELEASE}" /opt/bookstack
+cd /opt/bookstack || exit
 cp .env.example .env
 sudo sed -i "s|APP_URL=.*|APP_URL=http://$LOCAL_IP|g" /opt/bookstack/.env
 sudo sed -i "s/DB_DATABASE=.*/DB_DATABASE=$DB_NAME/" /opt/bookstack/.env
@@ -111,7 +111,7 @@ motd_ssh
 customize
 
 msg_info "Cleaning up"
-rm -rf /opt/v${RELEASE}.zip
+rm -rf /opt/v"${RELEASE}".zip
 $STD apt-get autoremove
 $STD apt-get autoclean
 msg_ok "Cleaned"

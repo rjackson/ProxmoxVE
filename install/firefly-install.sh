@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 community-scripts ORG
 # Author: quantumryuu
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://firefly-iii.org/
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -43,13 +43,13 @@ msg_ok "Set up database"
 
 msg_info "Installing Firefly III (Patience)"
 RELEASE=$(curl -fsSL https://api.github.com/repos/firefly-iii/firefly-iii/releases/latest | grep "tag_name" | awk '{print substr($2, 3, length($2)-4)}')
-cd /opt
+cd /opt || exit
 curl -fsSL "https://github.com/firefly-iii/firefly-iii/releases/download/v${RELEASE}/FireflyIII-v${RELEASE}.tar.gz" -o $(basename "https://github.com/firefly-iii/firefly-iii/releases/download/v${RELEASE}/FireflyIII-v${RELEASE}.tar.gz")
 mkdir -p /opt/firefly
-tar -xzf FireflyIII-v${RELEASE}.tar.gz -C /opt/firefly
+tar -xzf FireflyIII-v"${RELEASE}".tar.gz -C /opt/firefly
 chown -R www-data:www-data /opt/firefly
 chmod -R 775 /opt/firefly/storage
-cd /opt/firefly
+cd /opt/firefly || exit
 cp .env.example .env
 sed -i "s/DB_HOST=.*/DB_HOST=localhost/" /opt/firefly/.env
 sed -i "s/DB_PASSWORD=.*/DB_PASSWORD=$DB_PASS/" /opt/firefly/.env
@@ -92,7 +92,7 @@ motd_ssh
 customize
 
 msg_info "Cleaning up"
-rm -rf /opt/FireflyIII-v${RELEASE}.tar.gz
+rm -rf /opt/FireflyIII-v"${RELEASE}".tar.gz
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean
 msg_ok "Cleaned"

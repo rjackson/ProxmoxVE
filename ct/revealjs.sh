@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-source <(curl -fsSL https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func)
+source <(curl -fsSL https://raw.githubusercontent.com/rjackson/ProxmoxVE/main/misc/build.func)
 # Copyright (c) 2021-2025 community-scripts ORG
 # Author: Slaviša Arežina (tremor021)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://github.com/hakimel/reveal.js
 
 APP="RevealJS"
@@ -37,11 +37,11 @@ function update_script() {
         msg_info "Updating $APP to ${RELEASE}"
         temp_file=$(mktemp)
 curl -fsSL "https://github.com/hakimel/reveal.js/archive/refs/tags/${RELEASE}.tar.gz" -o "$temp_file"
-        tar zxf $temp_file
+        tar zxf "$temp_file"
         rm -rf /opt/revealjs/node_modules/*
         cp /opt/revealjs/index.html /opt
-        cp -rf reveal.js-${RELEASE}/* /opt/revealjs
-        cd /opt/revealjs
+        cp -rf reveal.js-"${RELEASE}"/* /opt/revealjs
+        cd /opt/revealjs || exit
         $STD npm install
         cp -f /opt/index.html /opt/revealjs
         sed -i '25s/localhost/0.0.0.0/g' /opt/revealjs/gulpfile.js
@@ -53,8 +53,8 @@ curl -fsSL "https://github.com/hakimel/reveal.js/archive/refs/tags/${RELEASE}.ta
         msg_ok "Started $APP"
 
         msg_info "Cleaning Up"
-        rm -f $temp_file
-        rm -rf ~/reveal.js-${RELEASE}
+        rm -f "$temp_file"
+        rm -rf ~/reveal.js-"${RELEASE}"
         msg_ok "Cleanup Completed"
 
         msg_ok "Update Successful"

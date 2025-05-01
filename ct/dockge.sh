@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-source <(curl -fsSL https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func)
+source <(curl -fsSL https://raw.githubusercontent.com/rjackson/ProxmoxVE/main/misc/build.func)
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://dockge.kuma.pet/
 
 APP="Dockge"
@@ -28,7 +28,7 @@ function update_script() {
         exit
     fi
     msg_info "Updating ${APP}"
-    cd /opt/dockge
+    cd /opt/dockge || exit
     docker compose pull
     docker compose up -d
     msg_ok "Updated ${APP}"

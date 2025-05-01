@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 community-scripts ORG
 # Author: Slaviša Arežina (tremor021)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://github.com/HabitRPG/habitica
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -38,12 +38,12 @@ msg_info "Setup ${APPLICATION}"
 temp_file=$(mktemp)
 RELEASE=$(curl -fsSL https://api.github.com/repos/HabitRPG/habitica/releases/latest | grep "tag_name" | awk '{print substr($2, 3, length($2)-4) }')
 curl -fsSL "https://github.com/HabitRPG/habitica/archive/refs/tags/v${RELEASE}.tar.gz" -o "$temp_file"
-tar zxf $temp_file
-mv habitica-${RELEASE}/ /opt/habitica
-cd /opt/habitica
+tar zxf "$temp_file"
+mv habitica-"${RELEASE}"/ /opt/habitica
+cd /opt/habitica || exit
 $STD npm i
 cp config.json.example config.json
-echo "${RELEASE}" >/opt/${APPLICATION}_version.txt
+echo "${RELEASE}" >/opt/"${APPLICATION}"_version.txt
 msg_ok "Setup ${APPLICATION}"
 
 msg_info "Creating Service"
@@ -101,7 +101,7 @@ motd_ssh
 customize
 
 msg_info "Cleaning up"
-rm -f $temp_file
+rm -f "$temp_file"
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean
 msg_ok "Cleaned"

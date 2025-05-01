@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 community-scripts ORG
 # Author: cfurrow
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://github.com/gristlabs/grist-core
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -35,11 +35,11 @@ msg_info "Installing Grist"
 RELEASE=$(curl -fsSL https://api.github.com/repos/gristlabs/grist-core/releases/latest | grep "tag_name" | awk '{print substr($2, 3, length($2)-4) }')
 export CYPRESS_INSTALL_BINARY=0
 export NODE_OPTIONS="--max-old-space-size=2048"
-cd /opt
+cd /opt || exit
 curl -fsSL "https://github.com/gristlabs/grist-core/archive/refs/tags/v${RELEASE}.zip" -o $(basename "https://github.com/gristlabs/grist-core/archive/refs/tags/v${RELEASE}.zip")
-unzip -q v$RELEASE.zip
-mv grist-core-${RELEASE} grist
-cd grist
+unzip -q v"$RELEASE".zip
+mv grist-core-"${RELEASE}" grist
+cd grist || exit
 $STD yarn install
 $STD yarn run build:prod
 $STD yarn run install:python
@@ -47,7 +47,7 @@ cat <<EOF >/opt/grist/.env
 NODE_ENV=production
 GRIST_HOST=0.0.0.0
 EOF
-echo "${RELEASE}" >/opt/${APPLICATION}_version.txt
+echo "${RELEASE}" >/opt/"${APPLICATION}"_version.txt
 msg_ok "Installed Grist"
 
 msg_info "Create Service"
@@ -73,7 +73,7 @@ motd_ssh
 customize
 
 msg_info "Cleaning up"
-rm -rf /opt/v${RELEASE}.zip
+rm -rf /opt/v"${RELEASE}".zip
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean
 msg_ok "Cleaned"

@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 community-scripts ORG
 # Author: Slaviša Arežina (tremor021)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://github.com/benzino77/tasmocompiler
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -41,10 +41,10 @@ msg_info "Setup TasmoCompiler"
 mkdir /tmp/Tasmota
 RELEASE=$(curl -fsSL https://api.github.com/repos/benzino77/tasmocompiler/releases/latest | grep "tag_name" | awk '{print substr($2, 3, length($2)-4) }')
 curl -fsSL "https://github.com/benzino77/tasmocompiler/archive/refs/tags/v${RELEASE}.tar.gz" -o "/tmp/v${RELEASE}.tar.gz"
-cd /tmp
-tar xzf /tmp/v${RELEASE}.tar.gz
-mv tasmocompiler-${RELEASE}/ /opt/tasmocompiler/
-cd /opt/tasmocompiler
+cd /tmp || exit
+tar xzf /tmp/v"${RELEASE}".tar.gz
+mv tasmocompiler-"${RELEASE}"/ /opt/tasmocompiler/
+cd /opt/tasmocompiler || exit
 $STD yarn install
 export NODE_OPTIONS=--openssl-legacy-provider
 $STD npm i
@@ -77,7 +77,7 @@ motd_ssh
 customize
 
 msg_info "Cleaning up"
-rm -f /tmp/v${RELEASE}.tar.gz
+rm -f /tmp/v"${RELEASE}".tar.gz
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean
 msg_ok "Cleaned"

@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 community-scripts ORG
 # Author: Slaviša Arežina (tremor021)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://github.com/stackblitz-labs/bolt.diy/
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -35,11 +35,11 @@ msg_info "Setup bolt.diy"
 temp_file=$(mktemp)
 RELEASE=$(curl -fsSL https://api.github.com/repos/stackblitz-labs/bolt.diy/releases/latest | grep "tag_name" | awk '{print substr($2, 3, length($2)-4) }')
 curl -fsSL "https://github.com/stackblitz-labs/bolt.diy/archive/refs/tags/v${RELEASE}.tar.gz" -o "$temp_file"
-tar xzf $temp_file
-mv bolt.diy-${RELEASE} /opt/bolt.diy
-cd /opt/bolt.diy
+tar xzf "$temp_file"
+mv bolt.diy-"${RELEASE}" /opt/bolt.diy
+cd /opt/bolt.diy || exit
 $STD pnpm install
-echo "${RELEASE}" >/opt/${APPLICATION}_version.txt
+echo "${RELEASE}" >/opt/"${APPLICATION}"_version.txt
 msg_ok "Setup bolt.diy"
 
 msg_info "Creating Service"
@@ -65,7 +65,7 @@ motd_ssh
 customize
 
 msg_info "Cleaning up"
-rm -f $temp_file
+rm -f "$temp_file"
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean
 msg_ok "Cleaned"

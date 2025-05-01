@@ -3,7 +3,7 @@
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://github.com/community-scripts/rjackson/raw/main/LICENSE
 
 echo -e "\e[1;33m This script will allow USB passthrough to a PRIVILEGED LXC Container ONLY\e[0m"
 while true; do
@@ -16,7 +16,7 @@ while true; do
 done
 
 TEMP_DIR=$(mktemp -d)
-pushd $TEMP_DIR >/dev/null
+pushd "$TEMP_DIR" >/dev/null || exit
 CHAR_DEVS+=("166:.*")
 CHAR_DEVS+=("188:.*")
 CHAR_DEVS+=("189:.*")
@@ -41,10 +41,10 @@ HOOK_SCRIPT=${HOOK_SCRIPT//$'\n'/}
 
 CTID=$1
 CTID_CONFIG_PATH=/etc/pve/lxc/${CTID}.conf
-sed '/autodev/d' $CTID_CONFIG_PATH >CTID.conf
-cat CTID.conf >$CTID_CONFIG_PATH
+sed '/autodev/d' "$CTID_CONFIG_PATH" >CTID.conf
+cat CTID.conf >"$CTID_CONFIG_PATH"
 
-cat <<EOF >>$CTID_CONFIG_PATH
+cat <<EOF >>"$CTID_CONFIG_PATH"
 lxc.autodev: 1
 lxc.hook.autodev: bash -c '$HOOK_SCRIPT'
 EOF

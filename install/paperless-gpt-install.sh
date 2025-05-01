@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 community-scripts ORG
 # Author: MickLesk (CanbiZ)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://github.com/icereed/paperless-gpt
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -50,12 +50,12 @@ msg_info "Setup Paperless-GPT"
 temp_file=$(mktemp)
 RELEASE=$(curl -fsSL https://api.github.com/repos/icereed/paperless-gpt/releases/latest | grep "tag_name" | awk '{print substr($2, 3, length($2)-4) }')
 curl -fsSL "https://github.com/icereed/paperless-gpt/archive/refs/tags/v${RELEASE}.tar.gz" -o "$temp_file"
-tar zxf $temp_file
-mv paperless-gpt-${RELEASE} /opt/paperless-gpt
-cd /opt/paperless-gpt/web-app
+tar zxf "$temp_file"
+mv paperless-gpt-"${RELEASE}" /opt/paperless-gpt
+cd /opt/paperless-gpt/web-app || exit
 $STD npm install
 $STD npm run build
-cd /opt/paperless-gpt
+cd /opt/paperless-gpt || exit
 go mod download
 export CC=musl-gcc
 CGO_ENABLED=1 go build -tags musl -o /dev/null github.com/mattn/go-sqlite3
@@ -129,7 +129,7 @@ motd_ssh
 customize
 
 msg_info "Cleaning up"
-rm -f $temp_file
+rm -f "$temp_file"
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean
 msg_ok "Cleaned"

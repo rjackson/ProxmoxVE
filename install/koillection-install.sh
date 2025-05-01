@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 community-scripts ORG
 # Author: bvdberg01
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://koillection.github.io/
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -61,11 +61,11 @@ msg_ok "Installed Node.js/Yarn"
 
 msg_info "Installing Koillection"
 RELEASE=$(curl -fsSL https://api.github.com/repos/benjaminjonard/koillection/releases/latest | grep "tag_name" | awk '{print substr($2, 2, length($2)-3) }')
-cd /opt
+cd /opt || exit
 curl -fsSL "https://github.com/benjaminjonard/koillection/archive/refs/tags/${RELEASE}.zip" -o $(basename "https://github.com/benjaminjonard/koillection/archive/refs/tags/${RELEASE}.zip")
 unzip -q "${RELEASE}.zip"
 mv "/opt/koillection-${RELEASE}" /opt/koillection
-cd /opt/koillection
+cd /opt/koillection || exit
 cp /opt/koillection/.env /opt/koillection/.env.local
 APP_SECRET=$(openssl rand -base64 32)
 sed -i -e "s|^APP_ENV=.*|APP_ENV=prod|" \
@@ -79,11 +79,11 @@ export COMPOSER_ALLOW_SUPERUSER=1
 $STD composer install --no-dev -o --no-interaction --classmap-authoritative
 $STD php bin/console doctrine:migrations:migrate --no-interaction
 $STD php bin/console app:translations:dump
-cd assets/
+cd assets/ || exit
 $STD yarn install
 $STD yarn build
 chown -R www-data:www-data /opt/koillection/public/uploads
-echo "${RELEASE}" >/opt/${APPLICATION}_version.txt
+echo "${RELEASE}" >/opt/"${APPLICATION}"_version.txt
 msg_ok "Installed Koillection"
 
 msg_info "Creating Service"

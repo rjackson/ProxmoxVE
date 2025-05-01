@@ -3,7 +3,7 @@
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
 # Co-Author: Scorpoon
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://github.com/revenz/Fenrus
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -31,8 +31,8 @@ $STD apt-get install -y dotnet-sdk-7.0
 msg_ok "Installed ASP.NET Core 7 SDK"
 
 msg_info "Installing ${APPLICATION}"
-git clone -q https://github.com/revenz/Fenrus.git /opt/${APPLICATION}
-cd /opt/${APPLICATION}
+git clone -q https://github.com/revenz/Fenrus.git /opt/"${APPLICATION}"
+cd /opt/${APPLICATION} || exit
 $STD dotnet publish -c Release -o "/opt/${APPLICATION}/" Fenrus.csproj
 msg_ok "Installed ${APPLICATION}"
 
@@ -50,7 +50,7 @@ User=root
 [Install]
 WantedBy=multi-user.target
 EOF
-$STD systemctl enable -q --now ${APPLICATION}
+$STD systemctl enable -q --now "${APPLICATION}"
 msg_ok "Created Service"
 
 motd_ssh

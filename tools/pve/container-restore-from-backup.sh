@@ -3,7 +3,7 @@
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://github.com/community-scripts/rjackson/raw/main/LICENSE
 
 clear
 if command -v pveversion >/dev/null 2>&1; then
@@ -67,7 +67,7 @@ else
     mkdir -p /var/lib/docker/volumes/hass_config/_data/restore
     msg_ok "Created Restore Directory."
 fi
-cd /var/lib/docker/volumes/hass_config/_data/backups/
+cd /var/lib/docker/volumes/hass_config/_data/backups/ || exit
 PS3="Please enter your choice: "
 files="$(ls -A .)"
 select filename in ${files}; do
@@ -78,8 +78,8 @@ msg_info "Stopping Home Assistant"
 docker stop homeassistant &>/dev/null
 msg_ok "Stopped Home Assistant"
 msg_info "Restoring Home Assistant using ${filename}"
-tar xvf ${filename} -C /var/lib/docker/volumes/hass_config/_data/restore &>/dev/null
-cd /var/lib/docker/volumes/hass_config/_data/restore
+tar xvf "${filename}" -C /var/lib/docker/volumes/hass_config/_data/restore &>/dev/null
+cd /var/lib/docker/volumes/hass_config/_data/restore || exit
 tar -xvf homeassistant.tar.gz &>/dev/null
 if ! command -v rsync >/dev/null 2>&1; then apt-get install -y rsync &>/dev/null; fi
 rsync -a /var/lib/docker/volumes/hass_config/_data/restore/data/ /var/lib/docker/volumes/hass_config/_data

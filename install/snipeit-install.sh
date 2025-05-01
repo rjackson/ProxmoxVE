@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 community-scripts ORG
 # Author: Michel Roegl-Brunner (michelroegl-brunner)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://snipeitapp.com/
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -41,9 +41,9 @@ msg_info "Installing Snipe-IT"
 temp_file=$(mktemp)
 RELEASE=$(curl -fsSL https://api.github.com/repos/snipe/snipe-it/releases/latest | grep "tag_name" | awk '{print substr($2, 3, length($2)-4) }')
 curl -fsSL "https://github.com/snipe/snipe-it/archive/refs/tags/v${RELEASE}.tar.gz" -o "$temp_file"
-tar zxf $temp_file
-mv snipe-it-${RELEASE} /opt/snipe-it
-cd /opt/snipe-it
+tar zxf "$temp_file"
+mv snipe-it-"${RELEASE}" /opt/snipe-it
+cd /opt/snipe-it || exit
 cp .env.example .env
 IPADDRESS=$(hostname -I | awk '{print $1}')
 
@@ -91,7 +91,7 @@ motd_ssh
 customize
 
 msg_info "Cleaning up"
-rm -f $temp_file
+rm -f "$temp_file"
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean
 msg_ok "Cleaned"

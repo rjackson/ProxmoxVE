@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 community-scripts ORG
 # Author: kristocopani
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://semaphoreui.com/
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -29,9 +29,9 @@ msg_ok "Installed Dependencies"
 msg_info "Setup Semaphore"
 RELEASE=$(curl -fsSL https://api.github.com/repos/semaphoreui/semaphore/releases/latest | grep "tag_name" | awk '{print substr($2, 3, length($2)-4) }')
 mkdir -p /opt/semaphore
-cd /opt/semaphore
+cd /opt/semaphore || exit
 curl -fsSL "https://github.com/semaphoreui/semaphore/releases/download/v${RELEASE}/semaphore_${RELEASE}_linux_amd64.deb" -o $(basename "https://github.com/semaphoreui/semaphore/releases/download/v${RELEASE}/semaphore_${RELEASE}_linux_amd64.deb")
-$STD dpkg -i semaphore_${RELEASE}_linux_amd64.deb
+$STD dpkg -i semaphore_"${RELEASE}"_linux_amd64.deb
 
 SEM_HASH=$(openssl rand -base64 32)
 SEM_ENCRYPTION=$(openssl rand -base64 32)
@@ -49,7 +49,7 @@ cat <<EOF >/opt/semaphore/config.json
 }
 EOF
 
-$STD semaphore user add --admin --login admin --email admin@helper-scripts.com --name Administrator --password ${SEM_PW} --config /opt/semaphore/config.json
+$STD semaphore user add --admin --login admin --email admin@helper-scripts.com --name Administrator --password "${SEM_PW}" --config /opt/semaphore/config.json
 echo "${SEM_PW}" >~/semaphore.creds
 echo "${RELEASE}" >"/opt/${APPLICATION}_version.txt"
 msg_ok "Setup Semaphore"
@@ -78,7 +78,7 @@ motd_ssh
 customize
 
 msg_info "Cleaning up"
-rm -rf semaphore_${RELEASE}_linux_amd64.deb
+rm -rf semaphore_"${RELEASE}"_linux_amd64.deb
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean
 msg_ok "Cleaned"

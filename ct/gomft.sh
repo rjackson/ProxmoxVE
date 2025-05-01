@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-source <(curl -fsSL https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func)
+source <(curl -fsSL https://raw.githubusercontent.com/rjackson/ProxmoxVE/main/misc/build.func)
 # Copyright (c) 2021-2025 community-scripts ORG
 # Author: Slaviša Arežina (tremor021)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://github.com/StarFleetCPTN/GoMFT
 
 APP="GoMFT"
@@ -50,7 +50,7 @@ function update_script() {
     curl -fsSL "https://github.com/StarFleetCPTN/GoMFT/archive/refs/tags/v${RELEASE}.tar.gz" -o "$temp_file"
     tar -xzf "$temp_file"
     cp -rf "GoMFT-${RELEASE}"/* /opt/gomft/
-    cd /opt/gomft
+    cd /opt/gomft || exit
     $STD npm install
     $STD npm run build
     $STD "$HOME"/go/bin/templ generate

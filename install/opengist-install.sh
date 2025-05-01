@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 community-scripts ORG
 # Author: Jonathan (jd-apprentice)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://opengist.io/
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -21,7 +21,7 @@ msg_info "Install Opengist"
 RELEASE=$(curl -fsSL https://api.github.com/repos/thomiceli/opengist/releases/latest | grep "tag_name" | awk '{print substr($2, 3, length($2)-4) }')
 echo "${RELEASE}" >"/opt/${APPLICATION}_version.txt"
 curl -fsSL "https://github.com/thomiceli/opengist/releases/download/v${RELEASE}/opengist${RELEASE}-linux-amd64.tar.gz" -o $(basename "https://github.com/thomiceli/opengist/releases/download/v${RELEASE}/opengist${RELEASE}-linux-amd64.tar.gz")
-$STD tar -xzf opengist${RELEASE}-linux-amd64.tar.gz
+$STD tar -xzf opengist"${RELEASE}"-linux-amd64.tar.gz
 mv opengist /opt/opengist
 chmod +x /opt/opengist/opengist
 mkdir -p /opt/opengist-data
@@ -52,7 +52,7 @@ motd_ssh
 customize
 
 msg_info "Cleaning up"
-rm -rf /opengist${RELEASE}-linux-amd64.tar.gz
+rm -rf /opengist"${RELEASE}"-linux-amd64.tar.gz
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean
 msg_ok "Cleaned"

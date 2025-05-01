@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 community-scripts ORG
 # Author: kristocopani
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://thelounge.chat/
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -33,10 +33,10 @@ $STD npm install --global node-gyp
 msg_ok "Installed Node.js"
 
 msg_info "Installing The Lounge"
-cd /opt
+cd /opt || exit
 RELEASE=$(curl -fsSL https://api.github.com/repos/thelounge/thelounge-deb/releases/latest | grep "tag_name" | awk '{print substr($2, 3, length($2)-4) }')
 curl -fsSL "https://github.com/thelounge/thelounge-deb/releases/download/v${RELEASE}/thelounge_${RELEASE}_all.deb" -o $(basename "https://github.com/thelounge/thelounge-deb/releases/download/v${RELEASE}/thelounge_${RELEASE}_all.deb")
-$STD dpkg -i ./thelounge_${RELEASE}_all.deb
+$STD dpkg -i ./thelounge_"${RELEASE}"_all.deb
 echo "${RELEASE}" >"/opt/${APPLICATION}_version.txt"
 msg_ok "Installed The Lounge"
 
@@ -44,7 +44,7 @@ motd_ssh
 customize
 
 msg_info "Cleaning up"
-rm -rf /opt/thelounge_${RELEASE}_all.deb
+rm -rf /opt/thelounge_"${RELEASE}"_all.deb
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean
 msg_ok "Cleaned"

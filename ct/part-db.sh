@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-source <(curl -fsSL https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func)
+source <(curl -fsSL https://raw.githubusercontent.com/rjackson/ProxmoxVE/main/misc/build.func)
 # Copyright (c) 2021-2025 community-scripts ORG
 # Author: bvdberg01
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://docs.part-db.de/
 
 APP="Part-DB"
@@ -34,13 +34,13 @@ function update_script() {
     msg_ok "Stopped Service"
 
     msg_info "Updating $APP to v${RELEASE}"
-    cd /opt
+    cd /opt || exit
     mv /opt/partdb/ /opt/partdb-backup
     curl -fsSL "https://github.com/Part-DB/Part-DB-server/archive/refs/tags/v${RELEASE}.zip" -o $(basename "https://github.com/Part-DB/Part-DB-server/archive/refs/tags/v${RELEASE}.zip")
     unzip -q "v${RELEASE}.zip"
-    mv /opt/Part-DB-server-${RELEASE}/ /opt/partdb
+    mv /opt/Part-DB-server-"${RELEASE}"/ /opt/partdb
 
-    cd /opt/partdb/
+    cd /opt/partdb/ || exit
     cp -r "/opt/partdb-backup/.env.local" /opt/partdb/
     cp -r "/opt/partdb-backup/public/media" /opt/partdb/public/
     cp -r "/opt/partdb-backup/config/banner.md" /opt/partdb/config/

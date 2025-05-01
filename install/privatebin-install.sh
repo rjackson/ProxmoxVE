@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 community-scripts ORG
 # Author: Nícolas Pastorello (opastorello)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://privatebin.info/
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -24,12 +24,12 @@ msg_ok "Installed Dependencies"
 
 msg_info "Installing PrivateBin"
 RELEASE=$(curl -fsSL https://api.github.com/repos/PrivateBin/PrivateBin/releases/latest | grep '"tag_name"' | sed -E 's/.*"([^"]+)".*/\1/')
-echo "${RELEASE}" >/opt/${APPLICATION}_version.txt
+echo "${RELEASE}" >/opt/"${APPLICATION}"_version.txt
 mkdir -p /opt/privatebin
-cd /opt/privatebin
+cd /opt/privatebin || exit
 curl -fsSL "https://github.com/PrivateBin/PrivateBin/archive/refs/tags/${RELEASE}.zip" -o $(basename "https://github.com/PrivateBin/PrivateBin/archive/refs/tags/${RELEASE}.zip")
-$STD unzip -q ${RELEASE}.zip
-mv PrivateBin-${RELEASE}/* .
+$STD unzip -q "${RELEASE}".zip
+mv PrivateBin-"${RELEASE}"/* .
 msg_ok "Installed PrivateBin"
 
 msg_info "Generating Universal SSL Certificate"
@@ -98,8 +98,8 @@ systemctl reload nginx
 msg_ok "Nginx Configured"
 
 msg_info "Cleaning up"
-rm -rf /opt/privatebin/${RELEASE}.zip
-rm -rf /opt/privatebin/PrivateBin-${RELEASE}
+rm -rf /opt/privatebin/"${RELEASE}".zip
+rm -rf /opt/privatebin/PrivateBin-"${RELEASE}"
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean
 msg_ok "Cleaned"

@@ -3,7 +3,7 @@
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://github.com/community-scripts/rjackson/raw/main/LICENSE
 
 echo -e "\n $(date)"
 excluded_containers=("$@")
@@ -33,17 +33,17 @@ for container in $(pct list | awk '{if(NR>1) print $1}'); do
     echo -e "[Info] Skipping $container"
     sleep 1
   else
-    status=$(pct status $container)
-    template=$(pct config $container | grep -q "template:" && echo "true" || echo "false")
+    status=$(pct status "$container")
+    template=$(pct config "$container" | grep -q "template:" && echo "true" || echo "false")
     if [ "$template" == "false" ] && [ "$status" == "status: stopped" ]; then
       echo -e "[Info] Starting $container"
-      pct start $container
+      pct start "$container"
       sleep 5
-      update_container $container
+      update_container "$container"
       echo -e "[Info] Shutting down $container"
-      pct shutdown $container &
+      pct shutdown "$container" &
     elif [ "$status" == "status: running" ]; then
-      update_container $container
+      update_container "$container"
     fi
   fi
 done

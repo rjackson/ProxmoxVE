@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://github.com/rogerfar/rdt-client
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -25,7 +25,7 @@ msg_info "Installing rdtclient"
 curl -fsSL "https://github.com/rogerfar/rdt-client/releases/latest/download/RealDebridClient.zip" -o $(basename "https://github.com/rogerfar/rdt-client/releases/latest/download/RealDebridClient.zip")
 unzip -qq RealDebridClient.zip -d /opt/rdtc
 rm RealDebridClient.zip
-cd /opt/rdtc
+cd /opt/rdtc || exit
 mkdir -p data/{db,downloads}
 sed -i 's#/data/db/#/opt/rdtc&#g' /opt/rdtc/appsettings.json
 msg_ok "Installed rdtclient"

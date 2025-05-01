@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 community-scripts ORG
 # Author: nicedevil007 (NiceDevil)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://it-tools.tech/
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -44,7 +44,7 @@ server {
 EOF
 $STD rc-update add nginx default
 $STD rc-service nginx start
-echo "${RELEASE}" >/opt/${APPLICATION}_version.txt
+echo "${RELEASE}" >/opt/"${APPLICATION}"_version.txt
 msg_ok "Installed IT-Tools"
 
 motd_ssh

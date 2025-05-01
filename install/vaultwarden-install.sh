@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://github.com/dani-garcia/vaultwarden
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -43,7 +43,7 @@ msg_ok "Installed Rust"
 
 msg_info "Building Vaultwarden ${VAULT} (Patience)"
 $STD git clone https://github.com/dani-garcia/vaultwarden
-cd vaultwarden
+cd vaultwarden || exit
 $STD cargo build --features "sqlite,mysql,postgresql" --release
 msg_ok "Built Vaultwarden ${VAULT}"
 
@@ -54,8 +54,8 @@ mkdir -p /opt/vaultwarden/data
 cp target/release/vaultwarden /opt/vaultwarden/bin/
 
 msg_info "Downloading Web-Vault ${WEBVAULT}"
-$STD curl -fsSLO https://github.com/dani-garcia/bw_web_builds/releases/download/$WEBVAULT/bw_web_$WEBVAULT.tar.gz
-$STD tar -xzf bw_web_$WEBVAULT.tar.gz -C /opt/vaultwarden/
+$STD curl -fsSLO https://github.com/dani-garcia/bw_web_builds/releases/download/"$WEBVAULT"/bw_web_"$WEBVAULT".tar.gz
+$STD tar -xzf bw_web_"$WEBVAULT".tar.gz -C /opt/vaultwarden/
 msg_ok "Downloaded Web-Vault ${WEBVAULT}"
 
 cat <<EOF >/opt/vaultwarden/.env

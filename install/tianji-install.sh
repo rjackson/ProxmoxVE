@@ -3,7 +3,7 @@
 # Copyright (c) 2021-2025 tteck
 # Author: tteck
 # Co-Author: MickLesk (Canbiz)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://github.com/msgbyte/tianji
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -55,12 +55,12 @@ echo -e "Tianji Secret: $TIANJI_SECRET" >>~/tianji.creds
 msg_ok "Set up PostgreSQL"
 
 msg_info "Installing Tianji (Extreme Patience)"
-cd /opt
+cd /opt || exit
 RELEASE=$(curl -fsSL https://api.github.com/repos/msgbyte/tianji/releases/latest | grep "tag_name" | awk '{print substr($2, 3, length($2)-4) }')
 curl -fsSL "https://github.com/msgbyte/tianji/archive/refs/tags/v${RELEASE}.zip" -o $(basename "https://github.com/msgbyte/tianji/archive/refs/tags/v${RELEASE}.zip")
-unzip -q v${RELEASE}.zip
-mv tianji-${RELEASE} /opt/tianji
-cd tianji
+unzip -q v"${RELEASE}".zip
+mv tianji-"${RELEASE}" /opt/tianji
+cd tianji || exit
 $STD pnpm install --filter @tianji/client... --config.dedupe-peer-dependents=false --frozen-lockfile
 $STD pnpm build:static
 $STD pnpm install --filter @tianji/server... --config.dedupe-peer-dependents=false
@@ -73,7 +73,7 @@ DATABASE_URL="postgresql://$DB_USER:$DB_PASS@localhost:5432/$DB_NAME?schema=publ
 OPENAI_API_KEY=""
 JWT_SECRET="$TIANJI_SECRET"
 EOF
-cd /opt/tianji/src/server
+cd /opt/tianji/src/server || exit
 $STD pnpm db:migrate:apply
 msg_ok "Installed Tianji"
 
@@ -101,7 +101,7 @@ motd_ssh
 customize
 
 msg_info "Cleaning up"
-rm -R /opt/v${RELEASE}.zip
+rm -R /opt/v"${RELEASE}".zip
 rm -rf /opt/tianji/src/client
 rm -rf /opt/tianji/website
 rm -rf /opt/tianji/reporter

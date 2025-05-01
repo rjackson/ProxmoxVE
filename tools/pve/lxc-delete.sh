@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 community-scripts ORG
 # Author: MickLesk (CanbiZ)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 
 function header_info {
     clear
@@ -20,7 +20,7 @@ spinner() {
     local pid=$1
     local delay=0.1
     local spinstr='|/-\'
-    while ps -p $pid >/dev/null; do
+    while ps -p "$pid" >/dev/null; do
         printf " [%c]  " "$spinstr"
         spinstr=${spinstr#?}${spinstr%"${spinstr#?}"}
         sleep $delay
@@ -54,9 +54,9 @@ menu_items=()
 FORMAT="%-10s %-15s %-10s"
 
 while read -r container; do
-    container_id=$(echo $container | awk '{print $1}')
-    container_name=$(echo $container | awk '{print $2}')
-    container_status=$(echo $container | awk '{print $3}')
+    container_id=$(echo "$container" | awk '{print $1}')
+    container_name=$(echo "$container" | awk '{print $2}')
+    container_status=$(echo "$container" | awk '{print $3}')
     formatted_line=$(printf "$FORMAT" "$container_name" "$container_status")
     menu_items+=("$container_id" "$formatted_line" "OFF")
 done <<<"$containers"
@@ -77,11 +77,11 @@ DELETE_MODE=${DELETE_MODE:-m}
 selected_ids=$(echo "$CHOICES" | tr -d '"' | tr -s ' ' '\n')
 
 for container_id in $selected_ids; do
-    status=$(pct status $container_id)
+    status=$(pct status "$container_id")
 
     if [ "$status" == "status: running" ]; then
         echo -e "${BL}[Info]${GN} Stopping container $container_id...${CL}"
-        pct stop $container_id &
+        pct stop "$container_id" &
         sleep 5
         echo -e "${BL}[Info]${GN} Container $container_id stopped.${CL}"
     fi

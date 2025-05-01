@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 community-scripts ORG
 # Author: MickLesk (Canbiz) & vhsdream
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://karakeep.app/
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -34,7 +34,7 @@ chmod +x /usr/bin/yt-dlp
 msg_ok "Installed Additional Tools"
 
 msg_info "Installing Meilisearch"
-cd /tmp
+cd /tmp || exit
 curl -fsSL "https://github.com/meilisearch/meilisearch/releases/latest/download/meilisearch.deb" -o "meilisearch.deb"
 $STD dpkg -i meilisearch.deb
 curl -fsSL "https://raw.githubusercontent.com/meilisearch/meilisearch/latest/config.toml" -o "/etc/meilisearch.toml"
@@ -59,25 +59,25 @@ $STD npm install -g corepack@0.31.0
 msg_ok "Installed Node.js"
 
 msg_info "Installing karakeep"
-cd /opt
+cd /opt || exit
 RELEASE=$(curl -fsSL https://api.github.com/repos/karakeep-app/karakeep/releases/latest | grep "tag_name" | awk '{print substr($2, 3, length($2)-4) }')
 curl -fsSL "https://github.com/karakeep-app/karakeep/archive/refs/tags/v${RELEASE}.zip" -o "v${RELEASE}.zip"
 unzip -q "v${RELEASE}.zip"
 mv karakeep-"${RELEASE}" /opt/karakeep
-cd /opt/karakeep
+cd /opt/karakeep || exit
 corepack enable
 export PUPPETEER_SKIP_DOWNLOAD="true"
 export NEXT_TELEMETRY_DISABLED=1
 export CI="true"
-cd /opt/karakeep/apps/web
+cd /opt/karakeep/apps/web || exit
 $STD pnpm install --frozen-lockfile
 $STD pnpm build
-cd /opt/karakeep/apps/workers
+cd /opt/karakeep/apps/workers || exit
 $STD pnpm install --frozen-lockfile
-cd /opt/karakeep/apps/cli
+cd /opt/karakeep/apps/cli || exit
 $STD pnpm install --frozen-lockfile
 $STD pnpm build
-cd /opt/karakeep/apps/mcp
+cd /opt/karakeep/apps/mcp || exit
 $STD pnpm install --frozen-lockfile
 $STD pnpm build
 
@@ -108,7 +108,7 @@ msg_ok "Installed karakeep"
 
 msg_info "Running Database Migration"
 mkdir -p ${DATA_DIR}
-cd /opt/karakeep/packages/db
+cd /opt/karakeep/packages/db || exit
 $STD pnpm migrate
 msg_ok "Database Migration Completed"
 

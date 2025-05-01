@@ -3,7 +3,7 @@
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://github.com/community-scripts/rjackson/raw/main/LICENSE
 
 function header_info {
     cat <<"EOF"
@@ -42,7 +42,7 @@ function error_exit() {
     local msg="${1:-$reason}"
     local flag="${RD}‼ ERROR ${CL}$EXIT@$LINE"
     echo -e "$flag $msg" 1>&2
-    exit $EXIT
+    exit "$EXIT"
 }
 clear
 header_info
@@ -84,18 +84,18 @@ VERSION=$(curl -fsSL https://api.github.com/repos/coder/code-server/releases/lat
     awk '{print substr($2, 3, length($2)-4) }')
 
 msg_info "Installing Code-Server v${VERSION}"
-curl -fOL https://github.com/coder/code-server/releases/download/v$VERSION/code-server_${VERSION}_amd64.deb &>/dev/null
-dpkg -i code-server_${VERSION}_amd64.deb &>/dev/null
-rm -rf code-server_${VERSION}_amd64.deb
+curl -fOL https://github.com/coder/code-server/releases/download/v"$VERSION"/code-server_"${VERSION}"_amd64.deb &>/dev/null
+dpkg -i code-server_"${VERSION}"_amd64.deb &>/dev/null
+rm -rf code-server_"${VERSION}"_amd64.deb
 mkdir -p ~/.config/code-server/
-systemctl enable -q --now code-server@$USER
+systemctl enable -q --now code-server@"$USER"
 cat <<EOF >~/.config/code-server/config.yaml
 bind-addr: 0.0.0.0:8680
 auth: none
 password: 
 cert: false
 EOF
-systemctl restart code-server@$USER
+systemctl restart code-server@"$USER"
 msg_ok "Installed Code-Server v${VERSION} on $hostname"
 
 echo -e "${APP} should be reachable by going to the following URL.

@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://www.zigbee2mqtt.io/
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -39,14 +39,14 @@ $STD npm install -g pnpm
 msg_ok "Installed pnpm"
 
 msg_info "Setting up Zigbee2MQTT"
-cd /opt
+cd /opt || exit
 RELEASE=$(curl -fsSL https://api.github.com/repos/Koenkk/zigbee2mqtt/releases/latest | grep "tag_name" | awk '{print substr($2, 2, length($2)-3) }')
 curl -fsSL "https://github.com/Koenkk/zigbee2mqtt/archive/refs/tags/${RELEASE}.zip" -o $(basename "https://github.com/Koenkk/zigbee2mqtt/archive/refs/tags/${RELEASE}.zip")
-unzip -q ${RELEASE}.zip
-mv zigbee2mqtt-${RELEASE} /opt/zigbee2mqtt
-cd /opt/zigbee2mqtt/data
+unzip -q "${RELEASE}".zip
+mv zigbee2mqtt-"${RELEASE}" /opt/zigbee2mqtt
+cd /opt/zigbee2mqtt/data || exit
 mv configuration.example.yaml configuration.yaml
-cd /opt/zigbee2mqtt
+cd /opt/zigbee2mqtt || exit
 $STD pnpm install --no-frozen-lockfile
 $STD pnpm build
 msg_ok "Installed Zigbee2MQTT"
@@ -74,7 +74,7 @@ motd_ssh
 customize
 
 msg_info "Cleaning up"
-rm -rf /opt/${RELEASE}.zip
+rm -rf /opt/"${RELEASE}".zip
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean
 msg_ok "Cleaned"

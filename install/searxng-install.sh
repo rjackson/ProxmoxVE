@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 community-scripts ORG
 # Author: MickLesk (Canbiz)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://github.com/searxng/searxng
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -35,7 +35,7 @@ mkdir -p /usr/local/searxng /etc/searxng
 useradd -d /etc/searxng searxng
 chown searxng:searxng /usr/local/searxng /etc/searxng
 $STD git clone https://github.com/searxng/searxng.git /usr/local/searxng/searxng-src
-cd /usr/local/searxng/
+cd /usr/local/searxng/ || exit
 sudo -u searxng python3 -m venv /usr/local/searxng/searx-pyenv
 source /usr/local/searxng/searx-pyenv/bin/activate
 $STD pip install --upgrade pip setuptools wheel

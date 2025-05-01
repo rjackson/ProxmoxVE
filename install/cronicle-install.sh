@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://cronicle.net/
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -32,8 +32,8 @@ msg_info "Installing Cronicle Primary Server"
 LATEST=$(curl -fsSL https://api.github.com/repos/jhuckaby/Cronicle/releases/latest | grep '"tag_name":' | cut -d'"' -f4)
 IP=$(hostname -I | awk '{print $1}')
 mkdir -p /opt/cronicle
-cd /opt/cronicle
-$STD tar zxvf <(curl -fsSL https://github.com/jhuckaby/Cronicle/archive/${LATEST}.tar.gz) --strip-components 1
+cd /opt/cronicle || exit
+$STD tar zxvf <(curl -fsSL https://github.com/jhuckaby/Cronicle/archive/"${LATEST}".tar.gz) --strip-components 1
 $STD npm install
 $STD node bin/build.js dist
 sed -i "s/localhost:3012/${IP}:3012/g" /opt/cronicle/conf/config.json

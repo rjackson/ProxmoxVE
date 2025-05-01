@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 community-scripts ORG
 # Author: tremor021
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://github.com/Suwayomi/Suwayomi-Server
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -24,7 +24,7 @@ URL=$(curl -fsSL https://api.github.com/repos/Suwayomi/Suwayomi-Server/releases/
 RELEASE=$(curl -fsSL https://api.github.com/repos/Suwayomi/Suwayomi-Server/releases/latest | grep "tag_name" | awk '{print substr($2, 2, length($2)-3) }')
 curl -fsSL "$URL" -o $(basename "$URL")
 $STD dpkg -i *.deb
-echo ${RELEASE} >/opt/suwayomi-server_version.txt
+echo "${RELEASE}" >/opt/suwayomi-server_version.txt
 msg_ok "Done setting up Suwayomi-Server"
 msg_info "Creating Service"
 cat <<EOF >/etc/systemd/system/suwayomi-server.service

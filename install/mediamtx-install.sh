@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://github.com/bluenviron/mediamtx
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -20,10 +20,10 @@ msg_ok "Installed Dependencies"
 msg_info "Installing MediaMTX"
 RELEASE=$(curl -fsSL https://api.github.com/repos/bluenviron/mediamtx/releases/latest | grep "tag_name" | awk '{print substr($2, 2, length($2)-3) }')
 mkdir -p /opt/mediamtx
-cd /opt/mediamtx
+cd /opt/mediamtx || exit
 curl -fsSL "https://github.com/bluenviron/mediamtx/releases/download/${RELEASE}/mediamtx_${RELEASE}_linux_amd64.tar.gz" -o $(basename "https://github.com/bluenviron/mediamtx/releases/download/${RELEASE}/mediamtx_${RELEASE}_linux_amd64.tar.gz")
-tar xzf mediamtx_${RELEASE}_linux_amd64.tar.gz
-rm -rf mediamtx_${RELEASE}_linux_amd64.tar.gz
+tar xzf mediamtx_"${RELEASE}"_linux_amd64.tar.gz
+rm -rf mediamtx_"${RELEASE}"_linux_amd64.tar.gz
 msg_ok "Installed MediaMTX"
 
 msg_info "Creating Service"

@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://www.commafeed.com/#/welcome
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -29,9 +29,9 @@ RELEASE=$(curl -fsSL https://api.github.com/repos/Athou/commafeed/releases/lates
 msg_info "Installing CommaFeed ${RELEASE}"
 mkdir /opt/commafeed
 curl -fsSL "https://github.com/Athou/commafeed/releases/download/${RELEASE}/commafeed-${RELEASE}-h2-jvm.zip" -o $(basename "https://github.com/Athou/commafeed/releases/download/${RELEASE}/commafeed-${RELEASE}-h2-jvm.zip")
-unzip -q commafeed-${RELEASE}-h2-jvm.zip
-mv commafeed-${RELEASE}-h2/* /opt/commafeed/
-echo "${RELEASE}" >/opt/${APPLICATION}_version.txt
+unzip -q commafeed-"${RELEASE}"-h2-jvm.zip
+mv commafeed-"${RELEASE}"-h2/* /opt/commafeed/
+echo "${RELEASE}" >/opt/"${APPLICATION}"_version.txt
 msg_ok "Installed CommaFeed ${RELEASE}"
 
 msg_info "Creating Service"
@@ -55,7 +55,7 @@ motd_ssh
 customize
 
 msg_info "Cleaning up"
-rm -rf commafeed-${RELEASE}-h2 commafeed-${RELEASE}-h2-jvm.zip zulu-repo_1.0.0-3_all.deb
+rm -rf commafeed-"${RELEASE}"-h2 commafeed-"${RELEASE}"-h2-jvm.zip zulu-repo_1.0.0-3_all.deb
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean
 msg_ok "Cleaned"

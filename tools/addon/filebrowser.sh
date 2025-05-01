@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 community-scripts ORG
 # Author: tteck (tteckster) | Co-Author: MickLesk
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 
 function header_info {
     clear
@@ -122,7 +122,7 @@ if [[ "${install_prompt,,}" =~ ^(y|yes)$ ]]; then
     read -r -p "Would you like to use No Authentication? (y/N): " auth_prompt
     if [[ "${auth_prompt,,}" =~ ^(y|yes)$ ]]; then
         msg_info "Configuring No Authentication"
-        cd /usr/local/community-scripts
+        cd /usr/local/community-scripts || exit
         filebrowser config init -a '0.0.0.0' -p "$PORT" -d "$DB_PATH" &>/dev/null
         filebrowser config set -a '0.0.0.0' -p "$PORT" -d "$DB_PATH" &>/dev/null
         filebrowser config init --auth.method=noauth &>/dev/null
@@ -131,7 +131,7 @@ if [[ "${install_prompt,,}" =~ ^(y|yes)$ ]]; then
         msg_ok "No Authentication configured"
     else
         msg_info "Setting up default authentication"
-        cd /usr/local/community-scripts
+        cd /usr/local/community-scripts || exit
         filebrowser config init -a '0.0.0.0' -p "$PORT" -d "$DB_PATH" &>/dev/null
         filebrowser config set -a '0.0.0.0' -p "$PORT" -d "$DB_PATH" &>/dev/null
         filebrowser users add admin helper-scripts.com --perm.admin --database "$DB_PATH" &>/dev/null

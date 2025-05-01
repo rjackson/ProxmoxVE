@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 tteck
 # Author: MickLesk (Canbiz)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://ersatztv.org/
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -14,11 +14,11 @@ network_check
 update_os
 
 msg_info "Installing FFmpeg (Patience)"
-cd /usr/local/bin
+cd /usr/local/bin || exit
 curl -fsSL "https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz" -o $(basename "https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz")
 $STD tar -xvf ffmpeg-release-amd64-static.tar.xz
 rm -f ffmpeg-*.tar.xz
-cd ffmpeg-*
+cd ffmpeg-* || exit
 mv ffmpeg ffprobe /usr/local/bin/
 rm -rf /usr/local/bin/ffmpeg-*
 msg_ok "Installed FFmpeg"
@@ -36,11 +36,11 @@ msg_ok "Set Up Hardware Acceleration"
 
 msg_info "Installing ErsatzTV"
 temp_file=$(mktemp)
-cd /opt
+cd /opt || exit
 RELEASE=$(curl -fsSL https://api.github.com/repos/ErsatzTV/ErsatzTV/releases | grep -oP '"tag_name": "\K[^"]+' | head -n 1)
 curl -fsSL "https://github.com/ErsatzTV/ErsatzTV/releases/download/${RELEASE}/ErsatzTV-${RELEASE}-linux-x64.tar.gz" -o "$temp_file"
 tar -xzf "$temp_file"
-mv /opt/ErsatzTV-${RELEASE}-linux-x64 /opt/ErsatzTV
+mv /opt/ErsatzTV-"${RELEASE}"-linux-x64 /opt/ErsatzTV
 echo "${RELEASE}" >"/opt/${APPLICATION}_version.txt"
 msg_ok "Installed ErsatzTV"
 
@@ -68,7 +68,7 @@ motd_ssh
 customize
 
 msg_info "Cleaning up"
-rm -f ${temp_file}
+rm -f "${temp_file}"
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean
 msg_ok "Cleaned"

@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 community-scripts ORG
 # Author: Andy Grunwald (andygrunwald)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://prometheus.io/
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -18,10 +18,10 @@ RELEASE=$(curl -fsSL https://api.github.com/repos/prometheus/alertmanager/releas
 mkdir -p /etc/alertmanager
 mkdir -p /var/lib/alertmanager
 curl -fsSL "https://github.com/prometheus/alertmanager/releases/download/v${RELEASE}/alertmanager-${RELEASE}.linux-amd64.tar.gz" -o $(basename "https://github.com/prometheus/alertmanager/releases/download/v${RELEASE}/alertmanager-${RELEASE}.linux-amd64.tar.gz")
-tar -xf alertmanager-${RELEASE}.linux-amd64.tar.gz
-mv alertmanager-${RELEASE}.linux-amd64/alertmanager alertmanager-${RELEASE}.linux-amd64/amtool /usr/local/bin/
-mv alertmanager-${RELEASE}.linux-amd64/alertmanager.yml /etc/alertmanager/alertmanager.yml
-echo "${RELEASE}" >/opt/${APPLICATION}_version.txt
+tar -xf alertmanager-"${RELEASE}".linux-amd64.tar.gz
+mv alertmanager-"${RELEASE}".linux-amd64/alertmanager alertmanager-"${RELEASE}".linux-amd64/amtool /usr/local/bin/
+mv alertmanager-"${RELEASE}".linux-amd64/alertmanager.yml /etc/alertmanager/alertmanager.yml
+echo "${RELEASE}" >/opt/"${APPLICATION}"_version.txt
 msg_ok "Installed Prometheus Alertmanager"
 
 msg_info "Creating Service"
@@ -53,5 +53,5 @@ customize
 msg_info "Cleaning up"
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean
-rm -rf alertmanager-${RELEASE}.linux-amd64 alertmanager-${RELEASE}.linux-amd64.tar.gz
+rm -rf alertmanager-"${RELEASE}".linux-amd64 alertmanager-"${RELEASE}".linux-amd64.tar.gz
 msg_ok "Cleaned"

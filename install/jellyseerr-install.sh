@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://docs.jellyseerr.dev/
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -32,12 +32,12 @@ $STD apt-get install -y nodejs
 msg_ok "Installed Node.js"
 
 git clone -q https://github.com/Fallenbagel/jellyseerr.git /opt/jellyseerr
-cd /opt/jellyseerr
+cd /opt/jellyseerr || exit
 $STD git checkout main
 
 pnpm_desired=$(grep -Po '"pnpm":\s*"\K[^"]+' /opt/jellyseerr/package.json)
 msg_info "Installing pnpm version $pnpm_desired..."
-$STD npm install -g pnpm@$pnpm_desired
+$STD npm install -g pnpm@"$pnpm_desired"
 msg_ok "Installed pnpm"
 
 msg_info "Installing Jellyseerr (Patience)"

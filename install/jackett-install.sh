@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://github.com/Jackett/Jackett
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -18,7 +18,7 @@ RELEASE=$(curl -fsSL https://github.com/Jackett/Jackett/releases/latest | grep "
 curl -fsSL "https://github.com/Jackett/Jackett/releases/download/$RELEASE/Jackett.Binaries.LinuxAMDx64.tar.gz" -o $(basename "https://github.com/Jackett/Jackett/releases/download/$RELEASE/Jackett.Binaries.LinuxAMDx64.tar.gz")
 tar -xzf Jackett.Binaries.LinuxAMDx64.tar.gz -C /opt
 rm -rf Jackett.Binaries.LinuxAMDx64.tar.gz
-echo "${RELEASE}" >/opt/${APPLICATION}_version.txt
+echo "${RELEASE}" >/opt/"${APPLICATION}"_version.txt
 msg_ok "Installed Jackett"
 
 msg_info "Creating Service"

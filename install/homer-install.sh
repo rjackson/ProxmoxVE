@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://github.com/bastienwirtz/homer
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -19,7 +19,7 @@ msg_ok "Installed Dependencies"
 
 msg_info "Installing Homer"
 mkdir -p /opt/homer
-cd /opt/homer
+cd /opt/homer || exit
 curl -fsSL "https://github.com/bastienwirtz/homer/releases/latest/download/homer.zip" -o $(basename "https://github.com/bastienwirtz/homer/releases/latest/download/homer.zip")
 $STD unzip homer.zip
 rm -rf homer.zip

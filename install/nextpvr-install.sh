@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 communtiy-scripts ORG
 # Author: MickLesk (Canbiz)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://nextpvr.com/
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -28,7 +28,7 @@ $STD apt-get install -y \
 msg_ok "Installed Dependencies"
 
 msg_info "Setup NextPVR (Patience)"
-cd /opt
+cd /opt || exit
 curl -fsSL "https://nextpvr.com/nextpvr-helper.deb" -o $(basename "https://nextpvr.com/nextpvr-helper.deb")
 $STD dpkg -i nextpvr-helper.deb
 msg_ok "Installed NextPVR"

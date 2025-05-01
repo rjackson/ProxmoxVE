@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://tautulli.com/
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -27,7 +27,7 @@ rm -rf /usr/lib/python3.*/EXTERNALLY-MANAGED
 msg_ok "Setup Python3"
 
 msg_info "Installing Tautulli"
-cd /opt
+cd /opt || exit
 $STD git clone https://github.com/Tautulli/Tautulli.git
 $STD pip install -q -r /opt/Tautulli/requirements.txt
 $STD pip install pyopenssl

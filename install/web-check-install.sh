@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 community-scripts ORG
 # Author: CrazyWolf13
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://github.com/lissy93/web-check
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -72,9 +72,9 @@ msg_info "Installing Web-Check (Patience)"
 temp_file=$(mktemp)
 RELEASE="patch-1"
 curl -fsSL "https://github.com/CrazyWolf13/web-check/archive/refs/heads/${RELEASE}.tar.gz" -o "$temp_file"
-tar xzf $temp_file
+tar xzf "$temp_file"
 mv web-check-${RELEASE} /opt/web-check
-cd /opt/web-check
+cd /opt/web-check || exit
 cat <<'EOF' >/opt/web-check/.env
 CHROME_PATH=/usr/bin/chromium
 PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
@@ -98,7 +98,7 @@ REACT_APP_API_ENDPOINT='/api'
 ENABLE_ANALYTICS='false'
 EOF
 $STD yarn install --frozen-lockfile --network-timeout 100000
-echo "${RELEASE}" >/opt/${APPLICATION}_version.txt
+echo "${RELEASE}" >/opt/"${APPLICATION}"_version.txt
 msg_ok "Installed Web-Check"
 
 msg_info "Building Web-Check"
@@ -147,7 +147,7 @@ motd_ssh
 customize
 
 msg_info "Cleaning up"
-rm -rf $temp_file
+rm -rf "$temp_file"
 rm -rf /var/lib/apt/lists/* /app/node_modules/.cache
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean

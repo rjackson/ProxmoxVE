@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #Copyright (c) 2021-2025 community-scripts ORG
 # Author: Michel Roegl-Brunner (michelroegl-brunner) | MickLesk (CanbiZ)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://guacamole.apache.org/
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -54,7 +54,7 @@ msg_info "Setup Apache Guacamole"
 mkdir -p /etc/guacamole/{extensions,lib}
 RELEASE_SERVER=$(curl -fsSL https://api.github.com/repos/apache/guacamole-server/tags | jq -r '.[0].name')
 curl -fsSL "https://api.github.com/repos/apache/guacamole-server/tarball/refs/tags/${RELEASE_SERVER}" | tar -xz --strip-components=1 -C /opt/apache-guacamole/server
-cd /opt/apache-guacamole/server
+cd /opt/apache-guacamole/server || exit
 $STD autoreconf -fi
 $STD ./configure --with-init-dir=/etc/init.d --enable-allow-freerdp-snapshots
 $STD make
@@ -62,7 +62,7 @@ $STD make install
 $STD ldconfig
 RELEASE_CLIENT=$(curl -fsSL https://api.github.com/repos/apache/guacamole-client/tags | jq -r '.[0].name')
 curl -fsSL "https://downloads.apache.org/guacamole/${RELEASE_CLIENT}/binary/guacamole-${RELEASE_CLIENT}.war" -o "/opt/apache-guacamole/tomcat9/webapps/guacamole.war"
-cd /root
+cd /root || exit
 curl -fsSL "https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-8.0.26.tar.gz" -o "/root/mysql-connector-java-8.0.26.tar.gz"
 $STD tar -xf ~/mysql-connector-java-8.0.26.tar.gz
 mv ~/mysql-connector-java-8.0.26/mysql-connector-java-8.0.26.jar /etc/guacamole/lib/
@@ -84,7 +84,7 @@ mysql -u root -e "GRANT ALL ON $DB_NAME.* TO '$DB_USER'@'localhost'; FLUSH PRIVI
     echo "Database Password: $DB_PASS"
     echo "Database Name: $DB_NAME"
 } >>~/guacamole.creds
-cd guacamole-auth-jdbc-1.5.5/mysql/schema
+cd guacamole-auth-jdbc-1.5.5/mysql/schema || exit
 cat *.sql | mysql -u root ${DB_NAME}
 {
     echo "mysql-hostname: 127.0.0.1"

@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 community-scripts ORG
 # Author: madelyn (DysfunctionalProgramming)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://komga.org/
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -21,7 +21,7 @@ msg_info "Installing Komga"
 RELEASE=$(curl -fsSL https://api.github.com/repos/gotson/komga/releases/latest | grep "tag_name" | awk '{print substr($2, 2, length($2)-3) }')
 curl -fsSL "https://github.com/gotson/komga/releases/download/${RELEASE}/komga-${RELEASE}.jar" -o $(basename "https://github.com/gotson/komga/releases/download/${RELEASE}/komga-${RELEASE}.jar")
 mkdir -p /opt/komga
-mv -f komga-${RELEASE}.jar /opt/komga/komga.jar
+mv -f komga-"${RELEASE}".jar /opt/komga/komga.jar
 echo "${RELEASE}" >"/opt/${APPLICATION}_version.txt"
 msg_ok "Installed Komga"
 

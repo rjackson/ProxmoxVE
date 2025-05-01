@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://dashy.to/
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -32,10 +32,10 @@ RELEASE=$(curl -fsSL https://api.github.com/repos/Lissy93/dashy/releases/latest 
 msg_info "Installing Dashy ${RELEASE} (Patience)"
 mkdir -p /opt/dashy
 curl -fsSL "https://github.com/Lissy93/dashy/archive/refs/tags/${RELEASE}.tar.gz" | tar -xz -C /opt/dashy --strip-components=1
-cd /opt/dashy
+cd /opt/dashy || exit
 $STD npm install
 $STD npm run build
-echo "${RELEASE}" >/opt/${APPLICATION}_version.txt
+echo "${RELEASE}" >/opt/"${APPLICATION}"_version.txt
 msg_ok "Installed Dashy ${RELEASE}"
 
 msg_info "Creating Service"

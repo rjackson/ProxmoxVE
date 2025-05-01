@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 community-scripts ORG
 # Author: bvdberg01
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://www.projectsend.org/
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -38,7 +38,7 @@ msg_ok "Set up MariaDB"
 
 msg_info "Installing projectsend"
 RELEASE=$(curl -fsSL https://api.github.com/repos/projectsend/projectsend/releases/latest | grep "tag_name" | awk '{print substr($2, 3, length($2)-4) }')
-cd /opt
+cd /opt || exit
 curl -fsSL "https://github.com/projectsend/projectsend/releases/download/r${RELEASE}/projectsend-r${RELEASE}.zip" -o $(basename "https://github.com/projectsend/projectsend/releases/download/r${RELEASE}/projectsend-r${RELEASE}.zip")
 mkdir projectsend
 unzip -q "projectsend-r${RELEASE}.zip" -d projectsend
@@ -55,7 +55,7 @@ sed -i -e "s/^\(memory_limit = \).*/\1 256M/" \
     -e "s/^\(upload_max_filesize = \).*/\1 256M/" \
     -e "s/^\(max_execution_time = \).*/\1 300/" \
     /etc/php/8.2/apache2/php.ini
-echo "${RELEASE}" >/opt/${APPLICATION}_version.txt
+echo "${RELEASE}" >/opt/"${APPLICATION}"_version.txt
 msg_ok "Installed projectsend"
 
 msg_info "Creating Service"

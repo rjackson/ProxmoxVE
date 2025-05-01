@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://www.stirlingpdf.com/
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -63,7 +63,7 @@ msg_ok "Installed Azul Zulu"
 
 msg_info "Installing JBIG2"
 $STD git clone https://github.com/agl/jbig2enc /opt/jbig2enc
-cd /opt/jbig2enc
+cd /opt/jbig2enc || exit
 $STD bash ./autogen.sh
 $STD bash ./configure
 $STD make
@@ -77,15 +77,15 @@ msg_ok "Installed Language Packs"
 msg_info "Installing Stirling-PDF (Additional Patience)"
 RELEASE=$(curl -fsSL https://api.github.com/repos/Stirling-Tools/Stirling-PDF/releases/latest | grep "tag_name" | awk '{print substr($2, 3, length($2)-4) }')
 curl -fsSL "https://github.com/Stirling-Tools/Stirling-PDF/archive/refs/tags/v${RELEASE}.tar.gz" -o $(basename "https://github.com/Stirling-Tools/Stirling-PDF/archive/refs/tags/v${RELEASE}.tar.gz")
-tar -xzf v${RELEASE}.tar.gz
-cd Stirling-PDF-$RELEASE
+tar -xzf v"${RELEASE}".tar.gz
+cd Stirling-PDF-$RELEASE || exit
 chmod +x ./gradlew
 $STD ./gradlew build
 mkdir -p /opt/Stirling-PDF
 touch /opt/Stirling-PDF/.env
 mv ./build/libs/Stirling-PDF-*.jar /opt/Stirling-PDF/
 mv scripts /opt/Stirling-PDF/
-ln -s /opt/Stirling-PDF/Stirling-PDF-$RELEASE.jar /opt/Stirling-PDF/Stirling-PDF.jar
+ln -s /opt/Stirling-PDF/Stirling-PDF-"$RELEASE".jar /opt/Stirling-PDF/Stirling-PDF.jar
 ln -s /usr/share/tesseract-ocr/5/tessdata/ /usr/share/tessdata
 msg_ok "Installed Stirling-PDF"
 
@@ -146,7 +146,7 @@ motd_ssh
 customize
 
 msg_info "Cleaning up"
-rm -rf v${RELEASE}.tar.gz /zulu-repo_1.0.0-3_all.deb
+rm -rf v"${RELEASE}".tar.gz /zulu-repo_1.0.0-3_all.deb
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean
 msg_ok "Cleaned"

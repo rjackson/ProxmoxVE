@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-source <(curl -fsSL https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func)
+source <(curl -fsSL https://raw.githubusercontent.com/rjackson/ProxmoxVE/main/misc/build.func)
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/rjackson/raw/main/LICENSE
 # Source: https://www.nocodb.com/
 
 APP="NocoDB"
@@ -29,7 +29,7 @@ function update_script() {
     fi
     msg_info "Updating ${APP}"
     systemctl stop nocodb.service
-    cd /opt/nocodb
+    cd /opt/nocodb || exit
     rm -rf nocodb
     curl -fsSL http://get.nocodb.com/linux-x64 -o nocodb -L
     chmod +x nocodb
